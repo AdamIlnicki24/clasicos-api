@@ -20,7 +20,6 @@ model User {
 
   role    Role     @default(Visitor)
   visitor Visitor?
-  admin   Admin?
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -40,15 +39,6 @@ model Visitor {
   userUuid String @unique @map("user_uuid")
 
   @@map("visitors")
-}
-
-model Admin {
-  uuid String @id @default(uuid())
-
-  user     User   @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
-  userUuid String @unique @map("user_uuid")
-
-  @@map("admins")
 }
 
 model Comment {

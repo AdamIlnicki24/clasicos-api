@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model User {
+  uuid               String  @id @default(uuid())
+  firebaseId         String  @unique @map("firebase_id") @db.VarChar(255)
+  email              String  @db.VarChar(320)
+  nick               String  @db.VarChar(63)
+  city               String? @db.VarChar(127)
+  favoriteClub       String? @map("favorite_club") @db.VarChar(127)
+  favoriteFootballer String? @map("favorite_footballer") @db.VarChar(127)
+
+  role    Role     @default(Visitor)
+  visitor Visitor?
+  admin   Admin?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  bannedAt  DateTime? @map("banned_at")
+
+  comments        Comment[]
+  recommendations Recommendation[]
+  team            Team?
+
+  @@map("users")
+}
+
+model Visitor {
+  uuid String @id @default(uuid())
+
+  user     User   @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
+  userUuid String @unique @map("user_uuid")
+
+  @@map("visitors")
+}
+
+model Admin {
+  uuid String @id @default(uuid())
+
+  user     User   @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
+  userUuid String @unique @map("user_uuid")
+
+  @@map("admins")
+}
+
+model Comment {
+  uuid                String @id @default(uuid())
+  content             String @db.VarChar(511)
+  articleFriendlyLink String @map("article_friendly_link")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  recommendations Recommendation[]
+
+  user     User   @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
+  userUuid String @map("user_uuid")
+
+  @@map("comments")
+}
+
+model Recommendation {
+  uuid String @id @default(uuid())
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  user        User    @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
+  userUuid    String  @map("user_uuid")
+  comment     Comment @relation(fields: [commentUuid], references: [uuid], onDelete: Cascade)
+  commentUuid String  @map("comment_uuid")
+
+  @@unique([userUuid, commentUuid])
+  @@map("recommendations")
+}
+
+model Player {
+  uuid        String   @id @default(uuid())
+  name        String?  @db.VarChar(127)
+  surname     String   @db.VarChar(127)
+  dateOfBirth DateTime @map("date_of_birth")
+  nationality String   @db.VarChar(127)
+  height      Int
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  teamEntries TeamPlayer[]
+
+  @@map("players")
+}
+
+model Team {
+  uuid String @id @default(uuid())
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  players TeamPlayer[]
+
+  user     User   @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
+  userUuid String @unique @map("user_uuid")
+
+  @@map("teams")
+}
+
+model TeamPlayer {
+  position Position
+
+  team       Team   @relation(fields: [teamUuid], references: [uuid], onDelete: Cascade)
+  teamUuid   String @map("team_uuid")
+  player     Player @relation(fields: [playerUuid], references: [uuid], onDelete: Cascade)
+  playerUuid String @map("player_uuid")
+
+  @@id([teamUuid, playerUuid])
+  @@map("team_players")
+}
+
+enum Role {
+  Visitor
+  Admin
+}
+
+enum Position {
+  Goalkeeper
+  Defender
+  Midfielder
+  Forward
+}

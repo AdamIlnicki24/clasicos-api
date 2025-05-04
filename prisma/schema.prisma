@@ -12,7 +12,7 @@ datasource db {
 model User {
   uuid               String  @id @default(uuid())
   firebaseId         String  @unique @map("firebase_id") @db.VarChar(255)
-  email              String  @db.VarChar(320)
+  email              String  @db.VarChar(127)
   nick               String  @db.VarChar(63)
   city               String? @db.VarChar(127)
   favoriteClub       String? @map("favorite_club") @db.VarChar(127)
@@ -21,9 +21,11 @@ model User {
   role    Role     @default(Visitor)
   visitor Visitor?
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  bannedAt  DateTime? @map("banned_at")
+  createdAt                  DateTime  @default(now()) @map("created_at")
+  acceptedTermsAndServicesAt DateTime? @map("accepted_terms_and_services_at")
+  acceptedPrivacyPolicyAt    DateTime? @map("accepted_privacy_policy_at")
+  updatedAt                  DateTime  @updatedAt @map("updated_at")
+  bannedAt                   DateTime? @map("banned_at")
 
   comments        Comment[]
   recommendations Recommendation[]

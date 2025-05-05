@@ -12,6 +12,7 @@ async function bootstrap() {
     }),
   );
 
+  // TODO: Think about adding specific object below
   app.enableCors();
 }
 bootstrap();

@@ -1,13 +1,10 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { NextFunction, Response } from 'express';
-import * as admin from 'firebase-admin';
-import {
-  ACCESS_DENIED_ERROR_MESSAGE,
-  TOKEN_VERIFICATION_ERROR_MESSAGE,
-} from 'src/constants/errorMessages';
-import { UserRequest } from 'types/userRequest';
-import { AuthService } from './auth.service';
+import { Injectable, NestMiddleware } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { NextFunction, Response } from "express";
+import * as admin from "firebase-admin";
+import { ACCESS_DENIED_ERROR_MESSAGE, TOKEN_VERIFICATION_ERROR_MESSAGE } from "src/constants/errorMessages";
+import { UserRequest } from "types/userRequest";
+import { AuthService } from "./auth.service";
 
 @Injectable()
 export class PreauthMiddleware implements NestMiddleware {
@@ -17,8 +14,7 @@ export class PreauthMiddleware implements NestMiddleware {
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
   ) {
-    const firebaseConfig =
-      this.configService.get<admin.ServiceAccount>('firebase');
+    const firebaseConfig = this.configService.get<admin.ServiceAccount>("firebase");
 
     this.defaultApp =
       admin.apps.length > 0
@@ -28,18 +24,14 @@ export class PreauthMiddleware implements NestMiddleware {
           });
   }
 
-  async use(
-    req: UserRequest,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  async use(req: UserRequest, res: Response, next: NextFunction): Promise<void> {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
       return next();
     }
 
-    const parts = authHeader.split(' ');
-    if (parts.length !== 2 || parts[0] !== 'Bearer') {
+    const parts = authHeader.split(" ");
+    if (parts.length !== 2 || parts[0] !== "Bearer") {
       return this.accessDenied(req.url, res);
     }
 
@@ -47,17 +39,7 @@ export class PreauthMiddleware implements NestMiddleware {
 
     try {
       const decodedToken = await this.defaultApp.auth().verifyIdToken(idToken);
-      let user = await this.authService.getUserByUid(decodedToken.uid);
-
-      if (!user) {
-        user = await this.authService.createUser({
-          email: decodedToken.email ?? undefined,
-          firebaseId: decodedToken.uid,
-          // TODO: Think about fields below
-          isPrivacyPolicyAccepted: true,
-          isTermsAndServicesAccepted: true,
-        });
-      }
+      const user = await this.authService.getUserByUid(decodedToken.uid);
 
       req.user = user;
       return next();

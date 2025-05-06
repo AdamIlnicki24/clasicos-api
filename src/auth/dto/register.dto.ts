@@ -1,26 +1,20 @@
-import {
-  IsBoolean,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MaxLength
-} from 'class-validator';
+import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
 
 export class RegisterDto {
   @IsNotEmpty()
   @IsEmail()
-  @MaxLength(150)
+  @MaxLength(127)
   email: string;
 
+  // TODO: Add decorators to validate password
+  @IsNotEmpty()
+  password: string;
+
   @IsString()
-  firebaseId: string;
+  @MaxLength(63)
+  nick: string;
 
   @IsBoolean()
   @IsOptional()
   isPrivacyPolicyAccepted?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  isTermsAndServicesAccepted?: boolean;
 }

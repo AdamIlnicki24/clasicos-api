@@ -1,11 +1,66 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePlayerDto } from './dto/create-player.dto';
-import { UpdatePlayerDto } from './dto/update-player.dto';
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { CreatePlayerDto } from "./dto/create-player.dto";
+import { UpdatePlayerDto } from "./dto/update-player.dto";
+import { PrismaService } from "prisma/prisma.service";
+import { PLAYER_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
 
 @Injectable()
 export class PlayersService {
-  create(createPlayerDto: CreatePlayerDto) {
-    return 'This action adds a new player';
+  constructor(private readonly prismaService: PrismaService) {}
+
+  // admin endpoint
+  async createPlayer(createPlayerDto: CreatePlayerDto) {
+    const { name, surname, dateOfBirth, height, nationality } = createPlayerDto;
+
+    return await this.prismaService.player.create({
+      data: {
+        name,
+        surname,
+        dateOfBirth,
+        height: parseInt(height),
+        nationality,
+      },
+    });
+  }
+
+  async getPlayers() {
+    return await this.prismaService.player.findMany();
+  }
+
+  async getPlayerByUuid(uuid: string) {
+    return await this.prismaService.player.findUnique({
+      where: { uuid },
+    });
+  }
+
+  // admin endpoint
+  async updatePlayer(uuid: string, updatePlayerDto: UpdatePlayerDto) {
+    const { name, surname, dateOfBirth, height, nationality } = updatePlayerDto;
+
+    const player = await this.prismaService.player.findUnique({
+      where: { uuid },
+    });
+
+    if (!player) {
+      throw new NotFoundException(PLAYER_NOT_FOUND_EXCEPTION);
+    }
+
+    const updatedPlayer = await this.prismaService.player
+      .update({
+        where: { uuid },
+        data: {
+          name,
+          surname,
+          dateOfBirth,
+          height: parseInt(height),
+          nationality,
+        },
+      })
+      .catch((error) => {
+        throw new BadRequestException(error.message);
+      });
+
+    return updatedPlayer;
   }
 
   findAll() {

@@ -1,34 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PlayersService } from './players.service';
-import { CreatePlayerDto } from './dto/create-player.dto';
-import { UpdatePlayerDto } from './dto/update-player.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { PlayersService } from "./players.service";
+import { CreatePlayerDto } from "./dto/create-player.dto";
+import { UpdatePlayerDto } from "./dto/update-player.dto";
 
-@Controller('players')
+@Controller("players")
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
   @Post()
-  create(@Body() createPlayerDto: CreatePlayerDto) {
-    return this.playersService.create(createPlayerDto);
+  async createPlayer(@Body() createPlayerDto: CreatePlayerDto) {
+    return await this.playersService.createPlayer(createPlayerDto);
   }
 
   @Get()
-  findAll() {
-    return this.playersService.findAll();
+  async getPlayers() {
+    return await this.playersService.getPlayers();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.playersService.findOne(+id);
+  @Get(":uuid")
+  async getPlayerByUuid(@Param("uuid") uuid: string) {
+    return await this.playersService.getPlayerByUuid(uuid);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePlayerDto: UpdatePlayerDto) {
-    return this.playersService.update(+id, updatePlayerDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.playersService.remove(+id);
+  @Patch(":uuid")
+  async updatePlayer(@Param("uuid") uuid: string, @Body() updatePlayerDto: UpdatePlayerDto) {
+    return await this.playersService.updatePlayer(uuid, updatePlayerDto);
   }
 }

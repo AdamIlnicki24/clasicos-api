@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../src/generated/client"
 }
 
 datasource db {
@@ -10,22 +10,17 @@ datasource db {
 }
 
 model User {
-  uuid               String  @id @default(uuid())
-  firebaseId         String  @unique @map("firebase_id") @db.VarChar(255)
-  email              String  @db.VarChar(127)
-  nick               String  @db.VarChar(63)
-  city               String? @db.VarChar(127)
-  favoriteClub       String? @map("favorite_club") @db.VarChar(127)
-  favoriteFootballer String? @map("favorite_footballer") @db.VarChar(127)
+  uuid       String @id @default(uuid())
+  firebaseId String @unique @map("firebase_id") @db.VarChar(255)
+  email      String @unique @db.VarChar(127)
+  nick       String @unique @db.VarChar(63)
 
   role    Role     @default(Visitor)
   visitor Visitor?
 
-  createdAt                  DateTime  @default(now()) @map("created_at")
-  acceptedTermsAndServicesAt DateTime? @map("accepted_terms_and_services_at")
-  acceptedPrivacyPolicyAt    DateTime? @map("accepted_privacy_policy_at")
-  updatedAt                  DateTime  @updatedAt @map("updated_at")
-  bannedAt                   DateTime? @map("banned_at")
+  createdAt               DateTime  @default(now()) @map("created_at")
+  acceptedPrivacyPolicyAt DateTime? @map("accepted_privacy_policy_at")
+  updatedAt               DateTime  @updatedAt @map("updated_at")
 
   comments        Comment[]
   recommendations Recommendation[]
@@ -35,7 +30,12 @@ model User {
 }
 
 model Visitor {
-  uuid String @id @default(uuid())
+  uuid               String  @id @default(uuid())
+  city               String? @db.VarChar(127)
+  favoriteClub       String? @map("favorite_club") @db.VarChar(127)
+  favoriteFootballer String? @map("favorite_footballer") @db.VarChar(127)
+
+  bannedAt DateTime? @map("banned_at")
 
   user     User   @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
   userUuid String @unique @map("user_uuid")
@@ -44,9 +44,9 @@ model Visitor {
 }
 
 model Comment {
-  uuid                String @id @default(uuid())
-  content             String @db.VarChar(511)
-  articleFriendlyLink String @map("article_friendly_link")
+  uuid                 String @id @default(uuid())
+  content              String @db.VarChar(511)
+  resourceFriendlyLink String @map("resource_friendly_link") @db.VarChar(255)
 
   createdAt DateTime  @default(now()) @map("created_at")
   deletedAt DateTime? @map("deleted_at")
@@ -89,6 +89,7 @@ model Player {
   @@map("players")
 }
 
+// TODO: Think about name of the model below
 model Team {
   uuid String @id @default(uuid())
 

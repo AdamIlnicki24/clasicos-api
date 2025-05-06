@@ -7,9 +7,10 @@ import { PlayersModule } from './players/players.module';
 import { AuthService } from './auth/auth.service';
 import { PreauthMiddleware } from './auth/preauth.middleware';
 import { PrismaService } from 'prisma/prisma.service'; // <-- tutaj
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, PlayersModule],
+  imports: [UsersModule, AuthModule, PlayersModule, CommentsModule],
   controllers: [AppController],
   providers: [AppService, AuthService, PrismaService],
 })

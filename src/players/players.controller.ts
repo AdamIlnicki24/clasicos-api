@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseEnumPipe } from "@nestjs/common";
 import { PlayersService } from "./players.service";
 import { CreatePlayerDto } from "./dto/create-player.dto";
 import { UpdatePlayerDto } from "./dto/update-player.dto";
+import { Position } from "src/generated/client";
 
 @Controller("players")
 export class PlayersController {
@@ -13,8 +14,16 @@ export class PlayersController {
   }
 
   @Get()
-  async getPlayers() {
-    return await this.playersService.getPlayers();
+  async getPlayers(
+    @Query(
+      new ParseEnumPipe(Position, {
+        optional: true,
+        errorHttpStatusCode: 400,
+      }),
+    )
+    position?: Position,
+  ) {
+    return this.playersService.getPlayers(position);
   }
 
   @Get(":uuid")

@@ -1,8 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, Query } from "@nestjs/common";
 import { CreatePlayerDto } from "./dto/create-player.dto";
 import { UpdatePlayerDto } from "./dto/update-player.dto";
 import { PrismaService } from "prisma/prisma.service";
 import { PLAYER_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
+import { Player, Position } from "src/generated/client";
 
 @Injectable()
 export class PlayersService {
@@ -23,8 +24,21 @@ export class PlayersService {
     });
   }
 
-  async getPlayers() {
-    return await this.prismaService.player.findMany();
+  async getPlayers(position?: Position): Promise<Player[]> {
+    const filter = position
+      ? {
+          teamEntries: {
+            some: {
+              position,
+            },
+          },
+        }
+      : {};
+
+    return this.prismaService.player.findMany({
+      where: filter,
+      orderBy: { surname: "asc" },
+    });
   }
 
   async getPlayerByUuid(uuid: string) {

@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseEnumPipe
 import { PlayersService } from "./players.service";
 import { CreatePlayerDto } from "./dto/create-player.dto";
 import { UpdatePlayerDto } from "./dto/update-player.dto";
-import { Position } from "src/generated/client";
+import { Position } from "@prisma/client";
 
 @Controller("players")
 export class PlayersController {

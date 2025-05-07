@@ -3,7 +3,7 @@ import { CreatePlayerDto } from "./dto/create-player.dto";
 import { UpdatePlayerDto } from "./dto/update-player.dto";
 import { PrismaService } from "prisma/prisma.service";
 import { PLAYER_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
-import { Player, Position } from "src/generated/client";
+import { Position, Player } from "@prisma/client";
 
 @Injectable()
 export class PlayersService {

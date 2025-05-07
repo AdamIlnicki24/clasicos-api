@@ -1,4 +1,4 @@
-import { Position, Role } from "src/generated/client";
+import { Position, Role } from "@prisma/client";
 
 export class AuthEntity {
   uuid: string;

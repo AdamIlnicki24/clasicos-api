@@ -3,8 +3,8 @@ import { PrismaService } from "prisma/prisma.service";
 import { AuthEntity } from "./entities/auth.entity";
 import { RegisterDto } from "./dto/register.dto";
 import { EXISTING_USER_EXCEPTION } from "src/constants/exceptions";
-import { Role, User } from "src/generated/client";
 import { FirebaseService } from "src/common/services/firebase.service";
+import { User, Role } from "@prisma/client";
 
 @Injectable()
 export class AuthService {

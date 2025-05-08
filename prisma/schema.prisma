@@ -31,7 +31,6 @@ model User {
 
 model Visitor {
   uuid               String  @id @default(uuid())
-  city               String? @db.VarChar(127)
   favoriteClub       String? @map("favorite_club") @db.VarChar(127)
   favoriteFootballer String? @map("favorite_footballer") @db.VarChar(127)
 
@@ -75,12 +74,13 @@ model Recommendation {
 }
 
 model Player {
-  uuid        String   @id @default(uuid())
-  name        String?  @db.VarChar(127)
-  surname     String   @db.VarChar(127)
-  nationality String   @db.VarChar(127)
+  uuid        String  @id @default(uuid())
+  name        String? @db.VarChar(127)
+  surname     String  @db.VarChar(127)
+  nationality String  @db.VarChar(127)
 
   createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   teamEntries TeamPlayer[]
 

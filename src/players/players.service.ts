@@ -27,13 +27,17 @@ export class PlayersService {
 
     if (existingPlayer) throw new ConflictException(EXISTING_PLAYER_EXCEPTION);
 
-    return await this.prismaService.player.create({
-      data: {
-        name,
-        surname,
-        nationality,
-      },
-    });
+    return await this.prismaService.player
+      .create({
+        data: {
+          name,
+          surname,
+          nationality,
+        },
+      })
+      .catch((error) => {
+        throw new BadRequestException(error.message);
+      });
   }
 
   async getPlayers(position?: Position): Promise<Player[]> {

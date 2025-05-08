@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException, Query } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, NotFoundException, Query } from "@nestjs/common";
 import { CreatePlayerDto } from "./dto/create-player.dto";
 import { UpdatePlayerDto } from "./dto/update-player.dto";
 import { PrismaService } from "prisma/prisma.service";
-import { PLAYER_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
+import { EXISTING_PLAYER_EXCEPTION, PLAYER_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
 import { Position, Player } from "@prisma/client";
 
 @Injectable()
@@ -10,15 +10,27 @@ export class PlayersService {
   constructor(private readonly prismaService: PrismaService) {}
 
   // admin endpoint
-  async createPlayer(createPlayerDto: CreatePlayerDto) {
-    const { name, surname, dateOfBirth, height, nationality } = createPlayerDto;
+  async createPlayer({ name, surname, nationality }: CreatePlayerDto) {
+    const existingPlayer = await this.prismaService.player.findFirst({
+      where: {
+        /**
+         * If a player with the given name, surname, and nationality already exists in the database,
+         * throw an exception. This exact validation is necessary because even among the best players
+         * of Barcelona and Real, there have been two players with the same name and surname,
+         * e.g. Luis Suarez from Uruguay and Luis Suarez from Spain.
+         */
+        name,
+        surname,
+        nationality,
+      },
+    });
+
+    if (existingPlayer) throw new ConflictException(EXISTING_PLAYER_EXCEPTION);
 
     return await this.prismaService.player.create({
       data: {
         name,
         surname,
-        dateOfBirth,
-        height: parseInt(height),
         nationality,
       },
     });
@@ -48,9 +60,7 @@ export class PlayersService {
   }
 
   // admin endpoint
-  async updatePlayer(uuid: string, updatePlayerDto: UpdatePlayerDto) {
-    const { name, surname, dateOfBirth, height, nationality } = updatePlayerDto;
-
+  async updatePlayer(uuid: string, { name, surname, nationality }: UpdatePlayerDto) {
     const player = await this.prismaService.player.findUnique({
       where: { uuid },
     });
@@ -65,8 +75,6 @@ export class PlayersService {
         data: {
           name,
           surname,
-          dateOfBirth,
-          height: parseInt(height),
           nationality,
         },
       })
@@ -83,13 +91,5 @@ export class PlayersService {
 
   findOne(id: number) {
     return `This action returns a #${id} player`;
-  }
-
-  update(id: number, updatePlayerDto: UpdatePlayerDto) {
-    return `This action updates a #${id} player`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} player`;
   }
 }

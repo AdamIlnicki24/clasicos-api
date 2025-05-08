@@ -1,34 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Body, Controller, Get, Patch } from "@nestjs/common";
+import { AuthEntity } from "src/auth/entities/auth.entity";
+import { User } from "src/common/decorators/user.decorator";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { UsersService } from "./users.service";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
+  // admin endpoint
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async getUsers() {
+    return await this.usersService.getUsers();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  @Get("me")
+  getMe(@User() user: AuthEntity) {
+    if (!user) return null;
+    return this.usersService.getUser(user.uuid);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Patch("me")
+  updateMe(@User() user: AuthEntity, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateUser(user.uuid, updateUserDto);
   }
 }

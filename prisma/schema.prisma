@@ -78,9 +78,7 @@ model Player {
   uuid        String   @id @default(uuid())
   name        String?  @db.VarChar(127)
   surname     String   @db.VarChar(127)
-  dateOfBirth DateTime @map("date_of_birth")
   nationality String   @db.VarChar(127)
-  height      Int
 
   createdAt DateTime @default(now()) @map("created_at")
 

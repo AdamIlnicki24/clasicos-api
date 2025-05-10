@@ -1,34 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CommentsService } from './comments.service';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { AuthEntity } from "src/auth/entities/auth.entity";
+import { User } from "src/common/decorators/user.decorator";
+import { CommentsService } from "./comments.service";
+import { CreateCommentDto } from "./dto/create-comment.dto";
 
-@Controller('comments')
+@Controller(":resourceFriendlyLink/comments")
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
+  // roles: admin and visitor
   @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
-    return this.commentsService.create(createCommentDto);
+  async createComment(
+    @Body() createCommentDto: CreateCommentDto,
+    @User() user: AuthEntity,
+    @Param("resourceFriendlyLink") resourceFriendlyLink: string,
+  ) {
+    return await this.commentsService.createComment(createCommentDto, user, resourceFriendlyLink);
   }
 
   @Get()
-  findAll() {
-    return this.commentsService.findAll();
+  async getComments() {
+    return await this.commentsService.getComments();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentsService.remove(+id);
+  // admin endpoint
+  @Delete(":uuid")
+  async deleteComment(@Param("uuid") uuid: string) {
+    return await this.commentsService.deleteComment(uuid);
   }
 }

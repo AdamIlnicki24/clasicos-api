@@ -8,20 +8,22 @@ import { UsersService } from "./users.service";
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // admin endpoint
+  // roles: admin
   @Get()
-  async getUsers() {
+  async getUsers(): Promise<AuthEntity[]> {
     return await this.usersService.getUsers();
   }
 
+  // roles: admin and visitor
   @Get("me")
-  getMe(@User() user: AuthEntity) {
+  async getMe(@User() user: AuthEntity): Promise<AuthEntity> {
     if (!user) return null;
-    return this.usersService.getUser(user.uuid);
+    return await this.usersService.getUser(user.uuid);
   }
 
+  // roles: admin and visitor
   @Patch("me")
-  updateMe(@User() user: AuthEntity, @Body() updateUserDto: UpdateUserDto) {
+  updateMe(@User() user: AuthEntity, @Body() updateUserDto: UpdateUserDto): Promise<AuthEntity> {
     return this.usersService.updateUser(user.uuid, updateUserDto);
   }
 }

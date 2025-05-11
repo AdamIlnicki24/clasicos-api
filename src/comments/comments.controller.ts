@@ -20,21 +20,23 @@ export class CommentsController {
   }
 
   @Get()
-  async getComments() {
+  async getComments(): Promise<Comment[]> {
     return await this.commentsService.getComments();
   }
 
-  // admin endpoint
+  // roles: admin
   @Delete(":uuid")
-  async deleteComment(@Param("uuid") uuid: string) {
+  async deleteComment(@Param("uuid") uuid: string): Promise<Comment> {
     return await this.commentsService.deleteComment(uuid);
   }
 
+  // roles: admin and visitor
   @Post(":uuid/recommendations")
   async createRecommendation(@Param("uuid") uuid: string, @User() user: AuthEntity): Promise<Recommendation> {
     return await this.commentsService.createRecommendation(uuid, user);
   }
 
+  // roles: admin and visitor
   @Delete(":uuid/recommendations")
   async deleteRecommendation(@Param("uuid") uuid: string, @User() user: AuthEntity): Promise<Recommendation> {
     return await this.commentsService.deleteRecommendation(uuid, user);

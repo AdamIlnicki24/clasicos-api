@@ -82,12 +82,11 @@ model Player {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  teamEntries TeamPlayer[]
+  teamPlayers TeamPlayer[]
 
   @@map("players")
 }
 
-// TODO: Think about name of the model below
 model Team {
   uuid String @id @default(uuid())
 

@@ -9,7 +9,6 @@ import { Position, Player } from "@prisma/client";
 export class PlayersService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  // admin endpoint
   async createPlayer({ name, surname, nationality }: CreatePlayerDto) {
     const existingPlayer = await this.prismaService.player.findFirst({
       where: {
@@ -43,7 +42,7 @@ export class PlayersService {
   async getPlayers(position?: Position): Promise<Player[]> {
     const filter = position
       ? {
-          teamEntries: {
+          teamPlayers: {
             some: {
               position,
             },
@@ -63,7 +62,6 @@ export class PlayersService {
     });
   }
 
-  // admin endpoint
   async updatePlayer(uuid: string, { name, surname, nationality }: UpdatePlayerDto) {
     const player = await this.prismaService.player.findUnique({
       where: { uuid },
@@ -87,13 +85,5 @@ export class PlayersService {
       });
 
     return updatedPlayer;
-  }
-
-  findAll() {
-    return `This action returns all players`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} player`;
   }
 }

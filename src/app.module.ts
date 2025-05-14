@@ -11,6 +11,7 @@ import { PrismaService } from "prisma/prisma.service";
 import { FirebaseService } from "./common/services/firebase.service";
 import { PreauthMiddleware } from "./auth/preauth.middleware";
 import { AuthService } from "./auth/auth.service";
+import { TeamModule } from './team/team.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthService } from "./auth/auth.service";
     AuthModule,
     PlayersModule,
     CommentsModule,
+    TeamModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, FirebaseService, AuthService],

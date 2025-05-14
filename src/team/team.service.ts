@@ -44,9 +44,9 @@ export class TeamService {
       .create({
         data: {
           userUuid: user.uuid,
-          players: { create: team },
+          teamPlayers: { create: team },
         },
-        include: { players: { include: { player: true } } },
+        include: { teamPlayers: { include: { player: true } } },
       })
       .catch((error) => {
         throw new BadRequestException(error.message);

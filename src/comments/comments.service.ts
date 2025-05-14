@@ -31,8 +31,14 @@ export class CommentsService {
     });
   }
 
-  async getComments(): Promise<Comment[]> {
-    return await this.prismaService.comment.findMany();
+  async getComments(): Promise<(Comment & { _count: { recommendations: number } })[]> {
+    return this.prismaService.comment.findMany({
+      include: {
+        _count: {
+          select: { recommendations: true },
+        },
+      },
+    });
   }
 
   async deleteComment(uuid: string): Promise<Comment> {
@@ -74,6 +80,16 @@ export class CommentsService {
         userUuid_commentUuid: {
           userUuid: user.uuid,
           commentUuid,
+        },
+      },
+    });
+  }
+
+  async getUserRecommendationsCount(user: AuthEntity): Promise<number> {
+    return await this.prismaService.recommendation.count({
+      where: {
+        comment: {
+          userUuid: user.uuid,
         },
       },
     });

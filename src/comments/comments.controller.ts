@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Comment, Recommendation } from "@prisma/client";
 import { AuthEntity } from "src/auth/entities/auth.entity";
 import { User } from "src/common/decorators/user.decorator";
+import { CommentWithCount } from "types/commentWithCount";
 import { CommentsService } from "./comments.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
-import { Comment, Recommendation } from "@prisma/client";
 
 @Controller(":resourceFriendlyLink/comments")
 export class CommentsController {
@@ -20,7 +21,7 @@ export class CommentsController {
   }
 
   @Get()
-  async getComments(): Promise<Comment[]> {
+  async getComments(): Promise<CommentWithCount[]> {
     return await this.commentsService.getComments();
   }
 
@@ -40,5 +41,10 @@ export class CommentsController {
   @Delete(":uuid/recommendations")
   async deleteRecommendation(@Param("uuid") uuid: string, @User() user: AuthEntity): Promise<Recommendation> {
     return await this.commentsService.deleteRecommendation(uuid, user);
+  }
+
+  @Get(":uuid/recommendations/count")
+  async getRecommendationsCount(@User() user: AuthEntity): Promise<number> {
+    return await this.commentsService.getUserRecommendationsCount(user);
   }
 }

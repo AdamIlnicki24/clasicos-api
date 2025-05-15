@@ -1,4 +1,5 @@
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { Position } from '@prisma/client';
+import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreatePlayerDto {
   @IsString()
@@ -14,4 +15,7 @@ export class CreatePlayerDto {
   @IsString()
   @MaxLength(127)
   nationality: string;
+
+  @IsEnum(Position)
+  position: Position;
 }

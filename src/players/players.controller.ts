@@ -18,6 +18,7 @@ export class PlayersController {
   @Get()
   async getPlayers(
     @Query(
+      "position",
       new ParseEnumPipe(Position, {
         optional: true,
         errorHttpStatusCode: 400,

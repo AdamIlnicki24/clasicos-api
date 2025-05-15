@@ -4,6 +4,7 @@ import { UpdatePlayerDto } from "./dto/update-player.dto";
 import { PrismaService } from "prisma/prisma.service";
 import { EXISTING_PLAYER_EXCEPTION, PLAYER_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
 import { Position, Player } from "@prisma/client";
+import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "src/constants/errorMessages";
 
 @Injectable()
 export class PlayersService {
@@ -35,8 +36,10 @@ export class PlayersService {
           position,
         },
       })
+      // TODO: Think about error handling
       .catch((error) => {
-        throw new BadRequestException(error.message);
+        console.error(error);
+        throw new BadRequestException(SOMETHING_WENT_WRONG_ERROR_MESSAGE);
       });
   }
 
@@ -78,7 +81,8 @@ export class PlayersService {
         },
       })
       .catch((error) => {
-        throw new BadRequestException(error.message);
+        console.error(error);
+        throw new BadRequestException(SOMETHING_WENT_WRONG_ERROR_MESSAGE);
       });
   }
 }

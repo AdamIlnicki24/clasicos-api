@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post } from "@nestjs/common";
 import { Team } from "@prisma/client";
 import { AuthEntity } from "src/auth/entities/auth.entity";
 import { User } from "src/common/decorators/user.decorator";
@@ -13,6 +13,16 @@ export class TeamController {
   @Post("me")
   async createMyTeam(@Body() createTeamDto: CreateTeamDto, @User() user: AuthEntity): Promise<Team> {
     return await this.teamService.createMyTeam(createTeamDto, user);
+  }
+
+  @Get("me")
+  async getMyTeam(@User() user: AuthEntity): Promise<Team> {
+    return await this.teamService.getMyTeam(user);
+  }
+
+  @Get(":uuid")
+  async getTeamByUuid(@Param("uuid") uuid: string): Promise<Team> {
+    return await this.teamService.getTeamByUuid(uuid);
   }
 
   @Patch("me")

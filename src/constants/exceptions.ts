@@ -6,4 +6,4 @@ export const PLAYER_NOT_FOUND_EXCEPTION = "Wybrany gracz nie istnieje.";
 export const COMMENT_NOT_FOUND_EXCEPTION = "Nie znaleziono komentarza.";
 export const EXISTING_TEAM_EXCEPTION = "Stworzyłeś już swoją drużynę. Możesz ją edytować lub usunąć.";
 export const INVALID_TEAM_EXCEPTION = `Drużyna musi zawierać dokładnie: ${GOALKEEPERS_LENGTH} bramkarza, ${DEFENDERS_LENGTH} obrońców, ${MIDFIELDERS_LENGTH} pomocników i ${FORWARDS_LENGTH} napastników.`;
-export const TEAM_NOT_FOUND_EXCEPTION = "Nie masz jeszcze stworzonej drużyny.";
+export const TEAM_NOT_FOUND_EXCEPTION = "Nie znaleziono drużyny.";

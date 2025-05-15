@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { Team } from "@prisma/client";
 import { AuthEntity } from "src/auth/entities/auth.entity";
 import { User } from "src/common/decorators/user.decorator";
@@ -28,5 +28,10 @@ export class TeamController {
   @Patch("me")
   async updateMyTeam(@Body() updateTeamDto: UpdateTeamDto, @User() user: AuthEntity): Promise<Team> {
     return await this.teamService.updateMyTeam(updateTeamDto, user);
+  }
+
+  @Delete("me")
+  async deleteMyTeam(@User() user: AuthEntity): Promise<Team> {
+    return await this.teamService.deleteMyTeam(user);
   }
 }

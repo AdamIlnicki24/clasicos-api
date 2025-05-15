@@ -143,4 +143,34 @@ export class TeamService {
         throw new BadRequestException(SOMETHING_WENT_WRONG_ERROR_MESSAGE);
       });
   }
+
+  async deleteMyTeam(user: AuthEntity): Promise<Team> {
+    const team = await this.prismaService.team.findUnique({
+      where: {
+        userUuid: user.uuid,
+      },
+      include: {
+        teamPlayers: {
+          include: {
+            player: true,
+          },
+        },
+      },
+    });
+
+    if (!team) throw new NotFoundException(TEAM_NOT_FOUND_EXCEPTION);
+
+    return await this.prismaService.team.delete({
+      where: {
+        uuid: team.uuid,
+      },
+      include: {
+        teamPlayers: {
+          include: {
+            player: true,
+          },
+        },
+      },
+    });
+  }
 }

@@ -9,7 +9,7 @@ import { Position, Player } from "@prisma/client";
 export class PlayersService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createPlayer({ name, surname, nationality }: CreatePlayerDto) {
+  async createPlayer({ name, surname, nationality, position }: CreatePlayerDto) {
     const existingPlayer = await this.prismaService.player.findFirst({
       where: {
         /**
@@ -32,6 +32,7 @@ export class PlayersService {
           name,
           surname,
           nationality,
+          position,
         },
       })
       .catch((error) => {
@@ -40,29 +41,24 @@ export class PlayersService {
   }
 
   async getPlayers(position?: Position): Promise<Player[]> {
-    const filter = position
-      ? {
-          teamPlayers: {
-            some: {
-              position,
-            },
-          },
-        }
-      : {};
-
-    return this.prismaService.player.findMany({
-      where: filter,
+    return await this.prismaService.player.findMany({
+      /**
+       * When the user provides a position, the method should return only players eligible for that position.
+       * If no position is provided, the method should return all players, regardless of their position.
+       */
+      where: position ? { position } : {},
       orderBy: { surname: "asc" },
     });
   }
 
+  // TODO: Think about method below
   async getPlayerByUuid(uuid: string) {
     return await this.prismaService.player.findUnique({
       where: { uuid },
     });
   }
 
-  async updatePlayer(uuid: string, { name, surname, nationality }: UpdatePlayerDto) {
+  async updatePlayer(uuid: string, { name, surname, nationality, position }: UpdatePlayerDto) {
     const player = await this.prismaService.player.findUnique({
       where: { uuid },
     });
@@ -71,19 +67,18 @@ export class PlayersService {
       throw new NotFoundException(PLAYER_NOT_FOUND_EXCEPTION);
     }
 
-    const updatedPlayer = await this.prismaService.player
+    return await this.prismaService.player
       .update({
         where: { uuid },
         data: {
           name,
           surname,
           nationality,
+          position,
         },
       })
       .catch((error) => {
         throw new BadRequestException(error.message);
       });
-
-    return updatedPlayer;
   }
 }

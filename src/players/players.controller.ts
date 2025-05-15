@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseEnumPipe } from "@nestjs/common";
-import { PlayersService } from "./players.service";
+import { Body, Controller, Get, Param, ParseEnumPipe, Patch, Post, Query } from "@nestjs/common";
+import { Player, Position } from "@prisma/client";
 import { CreatePlayerDto } from "./dto/create-player.dto";
 import { UpdatePlayerDto } from "./dto/update-player.dto";
-import { Player, Position } from "@prisma/client";
+import { PlayersService } from "./players.service";
 
 @Controller("players")
 export class PlayersController {
@@ -25,7 +25,7 @@ export class PlayersController {
     )
     position?: Position,
   ): Promise<Player[]> {
-    return this.playersService.getPlayers(position);
+    return await this.playersService.getPlayers(position);
   }
 
   // roles: visitor and admin

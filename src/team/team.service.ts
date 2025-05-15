@@ -10,7 +10,7 @@ import { DEFENDERS_LENGTH, FORWARDS_LENGTH, GOALKEEPERS_LENGTH, MIDFIELDERS_LENG
 export class TeamService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createMeTeam(
+  async createMyTeam(
     { goalkeepers, defenders, midfielders, forwards }: CreateTeamDto,
     user: AuthEntity,
   ): Promise<Team> {

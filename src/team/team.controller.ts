@@ -10,7 +10,7 @@ export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
   @Post("me")
-  async createMeTeam(@Body() createTeamDto: CreateTeamDto, @User() user: AuthEntity): Promise<Team> {
-    return await this.teamService.createMeTeam(createTeamDto, user);
+  async createMyTeam(@Body() createTeamDto: CreateTeamDto, @User() user: AuthEntity): Promise<Team> {
+    return await this.teamService.createMyTeam(createTeamDto, user);
   }
 }

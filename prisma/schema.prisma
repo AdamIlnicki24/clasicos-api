@@ -74,10 +74,11 @@ model Recommendation {
 }
 
 model Player {
-  uuid        String  @id @default(uuid())
-  name        String? @db.VarChar(127)
-  surname     String  @db.VarChar(127)
-  nationality String  @db.VarChar(127)
+  uuid        String   @id @default(uuid())
+  name        String?  @db.VarChar(127)
+  surname     String   @db.VarChar(127)
+  nationality String   @db.VarChar(127)
+  position    Position
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -102,8 +103,6 @@ model Team {
 }
 
 model TeamPlayer {
-  position Position
-
   team       Team   @relation(fields: [teamUuid], references: [uuid], onDelete: Cascade)
   teamUuid   String @map("team_uuid")
   player     Player @relation(fields: [playerUuid], references: [uuid], onDelete: Cascade)

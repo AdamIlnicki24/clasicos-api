@@ -1,12 +1,12 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { CreateTeamDto } from "./dto/create-team.dto";
+import { Team } from "@prisma/client";
 import { PrismaService } from "prisma/prisma.service";
 import { AuthEntity } from "src/auth/entities/auth.entity";
-import { Position, Team } from "@prisma/client";
+import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "src/constants/errorMessages";
 import { EXISTING_TEAM_EXCEPTION, INVALID_TEAM_EXCEPTION, TEAM_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
 import { DEFENDERS_LENGTH, FORWARDS_LENGTH, GOALKEEPERS_LENGTH, MIDFIELDERS_LENGTH } from "src/constants/lengths";
+import { CreateTeamDto } from "./dto/create-team.dto";
 import { UpdateTeamDto } from "./dto/update-team.dto";
-import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "src/constants/errorMessages";
 
 @Injectable()
 export class TeamService {
@@ -33,13 +33,11 @@ export class TeamService {
       throw new BadRequestException(INVALID_TEAM_EXCEPTION);
     }
 
-    const { Goalkeeper, Defender, Midfielder, Forward } = Position;
-
     const team = [
-      ...goalkeepers.map((playerUuid) => ({ playerUuid, position: Goalkeeper })),
-      ...defenders.map((playerUuid) => ({ playerUuid, position: Defender })),
-      ...midfielders.map((playerUuid) => ({ playerUuid, position: Midfielder })),
-      ...forwards.map((playerUuid) => ({ playerUuid, position: Forward })),
+      ...goalkeepers.map((playerUuid) => ({ playerUuid })),
+      ...defenders.map((playerUuid) => ({ playerUuid })),
+      ...midfielders.map((playerUuid) => ({ playerUuid })),
+      ...forwards.map((playerUuid) => ({ playerUuid })),
     ];
 
     return await this.prismaService.team
@@ -116,13 +114,11 @@ export class TeamService {
       throw new BadRequestException(INVALID_TEAM_EXCEPTION);
     }
 
-    const { Goalkeeper, Defender, Midfielder, Forward } = Position;
-
     const team = [
-      ...goalkeepers.map((playerUuid) => ({ playerUuid, position: Goalkeeper })),
-      ...defenders.map((playerUuid) => ({ playerUuid, position: Defender })),
-      ...midfielders.map((playerUuid) => ({ playerUuid, position: Midfielder })),
-      ...forwards.map((playerUuid) => ({ playerUuid, position: Forward })),
+      ...goalkeepers.map((playerUuid) => ({ playerUuid })),
+      ...defenders.map((playerUuid) => ({ playerUuid })),
+      ...midfielders.map((playerUuid) => ({ playerUuid })),
+      ...forwards.map((playerUuid) => ({ playerUuid })),
     ];
 
     return await this.prismaService.team

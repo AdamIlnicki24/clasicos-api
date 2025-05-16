@@ -1,23 +1,24 @@
 import { IsUUID, ArrayMinSize, ArrayMaxSize } from "class-validator";
+import { DEFENDERS_LENGTH, FORWARDS_LENGTH, GOALKEEPERS_LENGTH, MIDFIELDERS_LENGTH } from "src/constants/lengths";
 
 export class CreateTeamDto {
   @IsUUID("all", { each: true })
-  @ArrayMinSize(1)
-  @ArrayMaxSize(1)
+  @ArrayMinSize(GOALKEEPERS_LENGTH)
+  @ArrayMaxSize(GOALKEEPERS_LENGTH)
   goalkeepers: string[];
 
   @IsUUID("all", { each: true })
-  @ArrayMinSize(4)
-  @ArrayMaxSize(4)
+  @ArrayMinSize(DEFENDERS_LENGTH)
+  @ArrayMaxSize(DEFENDERS_LENGTH)
   defenders: string[];
 
   @IsUUID("all", { each: true })
-  @ArrayMinSize(3)
-  @ArrayMaxSize(3)
+  @ArrayMinSize(MIDFIELDERS_LENGTH)
+  @ArrayMaxSize(MIDFIELDERS_LENGTH)
   midfielders: string[];
 
   @IsUUID("all", { each: true })
-  @ArrayMinSize(3)
-  @ArrayMaxSize(3)
+  @ArrayMinSize(FORWARDS_LENGTH)
+  @ArrayMaxSize(FORWARDS_LENGTH)
   forwards: string[];
 }

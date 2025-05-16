@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch } from "@nestjs/common";
 import { AuthEntity } from "src/auth/entities/auth.entity";
 import { User } from "src/common/decorators/user.decorator";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -19,6 +19,12 @@ export class UsersController {
   async getMe(@User() user: AuthEntity): Promise<AuthEntity> {
     if (!user) return null;
     return await this.usersService.getUser(user.uuid);
+  }
+
+  // roles: admin and visitor
+  @Get(":uuid")
+  async getUserByUuid(@Param("uuid") uuid: string): Promise<AuthEntity> {
+    return await this.usersService.getUser(uuid);
   }
 
   // roles: admin and visitor

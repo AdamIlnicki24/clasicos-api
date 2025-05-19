@@ -17,7 +17,7 @@ export class TeamController {
 
   @Get("me")
   async getMyTeam(@User() user: AuthEntity): Promise<Team> {
-    return await this.teamService.getMyTeam(user);
+    return await this.teamService.getTeamByUuid(user.team?.uuid);
   }
 
   @Get(":uuid")

@@ -54,27 +54,9 @@ export class TeamService {
       });
   }
 
-  // TODO: Think about creating separate helper method for 2 methods below (getMyTeam and getTeamByUuid)
-  async getMyTeam(user: AuthEntity): Promise<Team> {
-    const team = await this.prismaService.team.findUnique({
-      where: {
-        userUuid: user.uuid,
-      },
-      include: {
-        teamPlayers: {
-          include: {
-            player: true,
-          },
-        },
-      },
-    });
+  async getTeamByUuid(uuid?: string) {
+    if (!uuid) throw new NotFoundException(TEAM_NOT_FOUND_EXCEPTION);
 
-    if (!team) throw new NotFoundException(TEAM_NOT_FOUND_EXCEPTION);
-
-    return team;
-  }
-
-  async getTeamByUuid(uuid: string) {
     const team = await this.prismaService.team.findUnique({
       where: {
         uuid,

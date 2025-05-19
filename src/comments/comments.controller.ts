@@ -12,6 +12,7 @@ export class CommentsController {
 
   // roles: admin and visitor
   @Post()
+  // @Banned(false)
   async createComment(
     @Body() createCommentDto: CreateCommentDto,
     @User() user: AuthEntity,
@@ -32,12 +33,14 @@ export class CommentsController {
   }
 
   // roles: admin and visitor
+  // @Banned(false)
   @Post(":uuid/recommendations")
   async createRecommendation(@Param("uuid") uuid: string, @User() user: AuthEntity): Promise<Recommendation> {
     return await this.commentsService.createRecommendation(uuid, user);
   }
 
   // roles: admin and visitor
+  // TODO: Think about adding @Banned(false)
   @Delete(":uuid/recommendations")
   async deleteRecommendation(@Param("uuid") uuid: string, @User() user: AuthEntity): Promise<Recommendation> {
     return await this.commentsService.deleteRecommendation(uuid, user);

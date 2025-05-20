@@ -48,7 +48,6 @@ model Comment {
   resourceFriendlyLink String @map("resource_friendly_link") @db.VarChar(255)
 
   createdAt DateTime  @default(now()) @map("created_at")
-  deletedAt DateTime? @map("deleted_at")
 
   recommendations Recommendation[]
 
@@ -62,7 +61,6 @@ model Recommendation {
   uuid String @id @default(uuid())
 
   createdAt DateTime  @default(now()) @map("created_at")
-  deletedAt DateTime? @map("deleted_at")
 
   user        User    @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
   userUuid    String  @map("user_uuid")

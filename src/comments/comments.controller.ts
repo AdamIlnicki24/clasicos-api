@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
-import { Comment, Recommendation } from "@prisma/client";
+import { Comment, Recommendation, Role } from "@prisma/client";
 import { AuthEntity } from "src/auth/entities/auth.entity";
+import { Roles } from "src/common/decorators/roles.decorator";
 import { User } from "src/common/decorators/user.decorator";
 import { CommentWithCount } from "types/commentWithCount";
 import { CommentsService } from "./comments.service";
@@ -26,7 +27,7 @@ export class CommentsController {
     return await this.commentsService.getComments();
   }
 
-  // roles: admin
+  @Roles(Role.Admin)
   @Delete(":uuid")
   async deleteComment(@Param("uuid") uuid: string): Promise<Comment> {
     return await this.commentsService.deleteComment(uuid);

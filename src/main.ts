@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
 // TODO: Think about Prettier rules
+// TODO: Add roles in controllers
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

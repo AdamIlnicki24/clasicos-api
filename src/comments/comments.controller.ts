@@ -6,14 +6,15 @@ import { User } from "src/common/decorators/user.decorator";
 import { CommentWithCount } from "types/commentWithCount";
 import { CommentsService } from "./comments.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
+import { IsBanned } from "src/common/decorators/is-banned.decorator";
 
 @Controller(":resourceFriendlyLink/comments")
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  // roles: admin and visitor
+  @Roles(Role.Admin, Role.Visitor)
+  @IsBanned()
   @Post()
-  // @Banned(false)
   async createComment(
     @Body() createCommentDto: CreateCommentDto,
     @User() user: AuthEntity,
@@ -33,15 +34,15 @@ export class CommentsController {
     return await this.commentsService.deleteComment(uuid);
   }
 
-  // roles: admin and visitor
-  // @Banned(false)
+  @Roles(Role.Admin, Role.Visitor)
+  @IsBanned()
   @Post(":uuid/recommendations")
   async createRecommendation(@Param("uuid") uuid: string, @User() user: AuthEntity): Promise<Recommendation> {
     return await this.commentsService.createRecommendation(uuid, user);
   }
 
-  // roles: admin and visitor
-  // TODO: Think about adding @Banned(false)
+  @Roles(Role.Admin, Role.Visitor)
+  @IsBanned()
   @Delete(":uuid/recommendations")
   async deleteRecommendation(@Param("uuid") uuid: string, @User() user: AuthEntity): Promise<Recommendation> {
     return await this.commentsService.deleteRecommendation(uuid, user);

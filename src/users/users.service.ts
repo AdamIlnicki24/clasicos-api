@@ -1,7 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { Role } from "@prisma/client";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { Role, User, Visitor } from "@prisma/client";
 import { PrismaService } from "prisma/prisma.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { AuthEntity } from "src/auth/entities/auth.entity";
+import { ADMIN_CANNOT_BE_BANNED_EXCEPTION, USER_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
 
 @Injectable()
 export class UsersService {
@@ -19,7 +21,9 @@ export class UsersService {
 
   async getUser(uuid: string) {
     return await this.prismaService.user.findUnique({
-      where: { uuid },
+      where: {
+        uuid,
+      },
     });
   }
 
@@ -40,5 +44,79 @@ export class UsersService {
         visitor: true,
       },
     });
+  }
+
+  async banUser(userUuid: string): Promise<Visitor> {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        uuid: userUuid,
+      },
+      select: {
+        role: true,
+        visitor: {
+          select: {
+            userUuid: true,
+          },
+        },
+      },
+    });
+
+    if (!user) throw new NotFoundException(USER_NOT_FOUND_EXCEPTION);
+
+    if (user.role === Role.Admin) {
+      throw new ForbiddenException(ADMIN_CANNOT_BE_BANNED_EXCEPTION);
+    }
+
+    // TODO: Think about if statement below
+    // if (!user.visitor) {
+    //   throw new BadRequestException(USER_NOT_VISITOR_EXCEPTION);
+    // }
+
+    return await this.prismaService.visitor.update({
+      where: {
+        userUuid,
+      },
+      data: { bannedAt: new Date() },
+    });
+  }
+
+  async unbanUser(userUuid: string): Promise<Visitor> {
+    const user = await this.prismaService.user.findUnique({
+      where: { uuid: userUuid },
+      select: { visitor: { select: { userUuid: true } } },
+    });
+
+    if (!user) {
+      throw new NotFoundException(USER_NOT_FOUND_EXCEPTION);
+    }
+
+    // TODO: Think about if statement below
+    // if (!user.visitor) {
+    //   throw new BadRequestException(USER_NOT_VISITOR_EXCEPTION);
+    // }
+
+    return this.prismaService.visitor.update({
+      where: { userUuid },
+      data: { bannedAt: null },
+    });
+  }
+
+  async isUserBanned(user: AuthEntity): Promise<boolean> {
+    const bannedUser = await this.prismaService.visitor.findUnique({
+      where: {
+        userUuid: user.uuid,
+      },
+      select: {
+        bannedAt: true,
+        user: {
+          select: {
+            role: true,
+          },
+        },
+      },
+    });
+
+    if (!bannedUser) return false;
+    return bannedUser.bannedAt !== null;
   }
 }

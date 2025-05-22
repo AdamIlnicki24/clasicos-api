@@ -12,6 +12,9 @@ import { FirebaseService } from "./common/services/firebase.service";
 import { PreauthMiddleware } from "./auth/preauth.middleware";
 import { AuthService } from "./auth/auth.service";
 import { TeamModule } from './team/team.module';
+import { APP_GUARD } from "@nestjs/core";
+import { RolesGuard } from "./common/guards/roles.guard";
+import { IsBannedGuard } from "./common/guards/is-banned.guard";
 
 @Module({
   imports: [
@@ -26,7 +29,20 @@ import { TeamModule } from './team/team.module';
     TeamModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, FirebaseService, AuthService],
+  providers: [
+    AppService,
+    PrismaService,
+    FirebaseService,
+    AuthService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: IsBannedGuard,
+    },
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

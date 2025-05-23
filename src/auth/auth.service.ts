@@ -33,6 +33,8 @@ export class AuthService {
     });
 
     if (userFromDatabase) throw new ConflictException(EXISTING_USER_EXCEPTION);
+    
+    // TODO: Handle nick being unique
 
     const userFromFirebase = await this.firebaseService.createFirebaseUser(registerDto.email, registerDto.password);
 
@@ -42,6 +44,7 @@ export class AuthService {
         email: registerDto.email,
         nick: registerDto.nick,
         acceptedPrivacyPolicyAt: registerDto.isPrivacyPolicyAccepted ? new Date() : null,
+        visitor: { create: {} },
         role: Role.Visitor,
       },
     });

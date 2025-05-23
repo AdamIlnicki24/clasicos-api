@@ -17,6 +17,5 @@ export class RegisterDto {
   nick: string;
 
   @IsBoolean()
-  @IsOptional()
-  isPrivacyPolicyAccepted?: boolean;
+  isPrivacyPolicyAccepted: boolean;
 }

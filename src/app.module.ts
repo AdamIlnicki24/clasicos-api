@@ -15,6 +15,7 @@ import { TeamModule } from './team/team.module';
 import { APP_GUARD } from "@nestjs/core";
 import { RolesGuard } from "./common/guards/roles.guard";
 import { IsBannedGuard } from "./common/guards/is-banned.guard";
+import { UsersService } from "./users/users.service";
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { IsBannedGuard } from "./common/guards/is-banned.guard";
     PrismaService,
     FirebaseService,
     AuthService,
+    UsersService,
     {
       provide: APP_GUARD,
       useClass: RolesGuard,

@@ -31,8 +31,8 @@ export class UsersController {
 
   @Roles(Role.Admin, Role.Visitor)
   @Patch("me")
-  updateMe(@User() user: AuthEntity, @Body() updateUserDto: UpdateUserDto): Promise<AuthEntity> {
-    return this.usersService.updateUser(user.uuid, updateUserDto);
+  async updateMe(@User() user: AuthEntity, @Body() updateUserDto: UpdateUserDto): Promise<AuthEntity> {
+    return await this.usersService.updateUser(user.uuid, updateUserDto);
   }
 
   @Roles(Role.Admin)

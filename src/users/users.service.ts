@@ -101,10 +101,10 @@ export class UsersService {
     });
   }
 
-  async isUserBanned(user: AuthEntity): Promise<boolean> {
-    const bannedUser = await this.prismaService.visitor.findUnique({
+  async isUserBanned(uuid: string): Promise<boolean> {
+    const banned = await this.prismaService.visitor.findUnique({
       where: {
-        userUuid: user.uuid,
+        userUuid: uuid,
       },
       select: {
         bannedAt: true,
@@ -116,7 +116,10 @@ export class UsersService {
       },
     });
 
-    if (!bannedUser) return false;
-    return bannedUser.bannedAt !== null;
+    if (!banned) return false;
+
+    if (banned.user.role === Role.Admin) return false;
+
+    return banned.bannedAt !== null;
   }
 }

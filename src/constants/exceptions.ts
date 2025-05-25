@@ -9,5 +9,5 @@ export const INVALID_TEAM_EXCEPTION = `Drużyna musi zawierać dokładnie: ${GOA
 export const TEAM_NOT_FOUND_EXCEPTION = "Nie znaleziono drużyny.";
 export const USER_NOT_FOUND_EXCEPTION = "Nie znaleziono użytkownika.";
 export const ADMIN_CANNOT_BE_BANNED_EXCEPTION = "Nie możesz zbanować administratora.";
-export const USER_HAS_BEEN_BANNED_EXCEPTION = "Zostałeś zbanowany!";
+export const USER_HAS_BEEN_BANNED_EXCEPTION = "Zostałeś zbanowany i nie możesz wykonać tej akcji.";
 export const USER_NOT_LOGGED_IN_EXCEPTION = "Brak dostępu - musisz się zalogować.";

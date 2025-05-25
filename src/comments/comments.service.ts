@@ -26,7 +26,7 @@ export class CommentsService {
   async getCommentByUuid(uuid: string): Promise<Comment> {
     return await this.prismaService.comment.findUnique({
       where: {
-        uuid: uuid,
+        uuid,
       },
     });
   }

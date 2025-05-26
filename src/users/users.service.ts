@@ -1,9 +1,8 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import { Role, User, Visitor } from "@prisma/client";
+import { Role, Visitor } from "@prisma/client";
 import { PrismaService } from "prisma/prisma.service";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { AuthEntity } from "src/auth/entities/auth.entity";
 import { ADMIN_CANNOT_BE_BANNED_EXCEPTION, USER_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
+import { UpdateUserDto } from "./dto/update-user.dto";
 
 @Injectable()
 export class UsersService {

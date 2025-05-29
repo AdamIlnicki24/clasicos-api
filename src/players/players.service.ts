@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Player, Position } from "@prisma/client";
-import { PrismaService } from "prisma/prisma.service";
+import { PrismaService } from "./prisma/prisma.service";
 import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "src/constants/errorMessages";
 import { EXISTING_PLAYER_EXCEPTION, PLAYER_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
 import { CreatePlayerDto } from "./dto/create-player.dto";

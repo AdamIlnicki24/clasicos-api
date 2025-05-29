@@ -13,15 +13,11 @@ export class AuthService {
     private readonly firebaseService: FirebaseService,
   ) {}
 
-  // TODO: Finish method below
-  // private getSelectFields(): Prisma.UserSelect {}
-
   async getUserByUid(uid: string): Promise<AuthEntity> {
     return await this.prismaService.user.findUnique({
       where: {
         firebaseId: uid,
       },
-      // select: this.getSelectFields(),
     });
   }
 

@@ -7,7 +7,7 @@ export default (): FirebaseConfig => ({
   host: process.env.HOST || "127.0.0.1",
   environment: process.env.NODE_ENV || "development",
   storagePath: process.env.STORAGE_PATH || "./storage",
-  adminMail: process.env.ADMIN_MAIL ?? "",
+  adminMail: process.env.ADMIN_MAIL || "",
   firebase: {
     type: "service_account",
     projectId: process.env.FIREBASE_PROJECT_ID,

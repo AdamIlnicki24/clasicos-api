@@ -2,17 +2,17 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/main.ts",
+      "src": "dist/src/main.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["prisma/**", "src"]
+        "includeFiles": ["node_modules/.prisma/**", "prisma/**"]
       }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/main.ts",
+      "dest": "dist/src/main.js",
       "methods": ["GET", "POST", "PUT", "PATCH", "OPTIONS", "DELETE", "HEAD", "CONNECT", "TRACE"]
     }
   ]

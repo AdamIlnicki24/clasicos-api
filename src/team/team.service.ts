@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Team } from "@prisma/client";
-import { PrismaService } from "../prisma/prisma.service";
+import { PrismaService } from "prisma/prisma.service";
 import { AuthEntity } from "src/auth/entities/auth.entity";
 import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "src/constants/errorMessages";
 import { EXISTING_TEAM_EXCEPTION, INVALID_TEAM_EXCEPTION, TEAM_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";

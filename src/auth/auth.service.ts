@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from "@nestjs/common";
-import { PrismaService } from "prisma/prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 import { AuthEntity } from "./entities/auth.entity";
 import { RegisterDto } from "./dto/register.dto";
 import { EXISTING_USER_EXCEPTION } from "src/constants/exceptions";

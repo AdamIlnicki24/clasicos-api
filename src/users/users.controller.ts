@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Patch } from "@nestjs/common";
 import { Role, Visitor } from "@prisma/client";
-import { AuthEntity } from "src/auth/entities/auth.entity";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { User } from "src/common/decorators/user.decorator";
+import { AuthEntity } from "../auth/entities/auth.entity";
+import { Roles } from "../common/decorators/roles.decorator";
+import { User } from "../common/decorators/user.decorator";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersService } from "./users.service";
 

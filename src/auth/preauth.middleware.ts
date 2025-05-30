@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NextFunction, Response } from "express";
 import * as admin from "firebase-admin";
-import { ACCESS_DENIED_ERROR_MESSAGE, TOKEN_VERIFICATION_ERROR_MESSAGE } from "src/constants/errorMessages";
+import { ACCESS_DENIED_ERROR_MESSAGE, TOKEN_VERIFICATION_ERROR_MESSAGE } from "../constants/errorMessages";
 import { UserRequest } from "types/userRequest";
 import { AuthService } from "./auth.service";
 

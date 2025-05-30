@@ -1,9 +1,9 @@
 import { ConflictException, Injectable } from "@nestjs/common";
-import { PrismaService } from "src/prisma.service";
+import { PrismaService } from "../prisma.service";
 import { AuthEntity } from "./entities/auth.entity";
 import { RegisterDto } from "./dto/register.dto";
-import { EXISTING_USER_EXCEPTION } from "src/constants/exceptions";
-import { FirebaseService } from "src/common/services/firebase.service";
+import { EXISTING_USER_EXCEPTION } from "../constants/exceptions";
+import { FirebaseService } from "../common/services/firebase.service";
 import { User, Role } from "@prisma/client";
 
 @Injectable()

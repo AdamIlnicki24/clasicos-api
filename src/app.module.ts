@@ -7,7 +7,7 @@ import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { PlayersModule } from "./players/players.module";
 import { CommentsModule } from "./comments/comments.module";
-import { PrismaService } from "src/prisma.service";
+import { PrismaService } from "./prisma.service";
 import { FirebaseService } from "./common/services/firebase.service";
 import { PreauthMiddleware } from "./auth/preauth.middleware";
 import { AuthService } from "./auth/auth.service";

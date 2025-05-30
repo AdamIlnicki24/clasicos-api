@@ -3,7 +3,7 @@ import { Player, Position, Role } from "@prisma/client";
 import { CreatePlayerDto } from "./dto/create-player.dto";
 import { UpdatePlayerDto } from "./dto/update-player.dto";
 import { PlayersService } from "./players.service";
-import { Roles } from "src/common/decorators/roles.decorator";
+import { Roles } from "../common/decorators/roles.decorator";
 
 @Controller("players")
 export class PlayersController {

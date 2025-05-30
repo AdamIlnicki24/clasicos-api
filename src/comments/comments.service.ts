@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaService } from "src/prisma.service";
-import { AuthEntity } from "src/auth/entities/auth.entity";
-import { COMMENT_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
+import { PrismaService } from "../prisma.service";
+import { AuthEntity } from "../auth/entities/auth.entity";
+import { COMMENT_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 import { Comment, Recommendation } from "@prisma/client";
 

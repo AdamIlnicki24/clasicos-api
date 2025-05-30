@@ -1,13 +1,12 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
+import { ExpressAdapter } from "@nestjs/platform-express";
+import * as express from "express"; // Fixed import syntax
 
-// TODO: Think about Prettier rules
-// TODO: Add roles in controllers
-
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3001);
+export async function createApp() {
+  const server = express();
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -15,7 +14,16 @@ async function bootstrap() {
     }),
   );
 
-  // TODO: Think about adding specific object below
   app.enableCors();
+
+  return { app, server };
 }
-bootstrap();
+
+// Local development bootstrap
+if (process.env.NODE_ENV !== "production") {
+  (async () => {
+    const { app } = await createApp();
+    await app.listen(process.env.PORT || 3001);
+    console.log(`Local server running on ${await app.getUrl()}`);
+  })();
+}

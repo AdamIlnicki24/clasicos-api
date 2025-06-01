@@ -1,4 +1,7 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
+import { NICK_MAX_LENGTH, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "../../constants/lengths";
+
+// TODO: Correct aliases
 
 export class RegisterDto {
   @IsNotEmpty()
@@ -8,12 +11,12 @@ export class RegisterDto {
 
   // TODO: Add decorators to validate password
   @IsString()
-  @MinLength(6)
-  @MaxLength(127)
+  @MinLength(PASSWORD_MIN_LENGTH)
+  @MaxLength(PASSWORD_MAX_LENGTH)
   password: string;
 
   @IsString()
-  @MaxLength(63)
+  @MaxLength(NICK_MAX_LENGTH)
   nick: string;
 
   @IsBoolean()

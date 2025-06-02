@@ -40,6 +40,8 @@ export class AuthService {
 
     if (doesNickExist) throw new ConflictException(EXISTING_NICK_EXCEPTION);
 
+    // TODO: Handle nick's length validation
+
     if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) {
       throw new BadRequestException(PASSWORD_LENGTH_EXCEPTION);
     }

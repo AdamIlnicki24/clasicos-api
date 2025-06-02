@@ -2,8 +2,6 @@ import { IsBoolean, IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from "
 import { NICK_MAX_LENGTH, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "../../constants/lengths";
 import { NICK_MAX_LENGTH_EXCEPTION } from "../../constants/exceptions";
 
-// TODO: Correct aliases
-
 export class RegisterDto {
   @IsNotEmpty()
   @IsEmail()

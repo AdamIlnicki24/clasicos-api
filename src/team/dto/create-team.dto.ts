@@ -1,5 +1,5 @@
 import { IsUUID, ArrayMinSize, ArrayMaxSize } from "class-validator";
-import { DEFENDERS_LENGTH, FORWARDS_LENGTH, GOALKEEPERS_LENGTH, MIDFIELDERS_LENGTH } from "src/constants/lengths";
+import { DEFENDERS_LENGTH, FORWARDS_LENGTH, GOALKEEPERS_LENGTH, MIDFIELDERS_LENGTH } from "../../constants/lengths";
 
 export class CreateTeamDto {
   @IsUUID("all", { each: true })

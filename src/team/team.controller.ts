@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { Team } from "@prisma/client";
-import { AuthEntity } from "src/auth/entities/auth.entity";
-import { User } from "src/common/decorators/user.decorator";
+import { AuthEntity } from "../auth/entities/auth.entity";
+import { User } from "../common/decorators/user.decorator";
 import { CreateTeamDto } from "./dto/create-team.dto";
 import { TeamService } from "./team.service";
 import { UpdateTeamDto } from "./dto/update-team.dto";

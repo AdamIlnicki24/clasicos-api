@@ -1,10 +1,10 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Team } from "@prisma/client";
-import { PrismaService } from "prisma/prisma.service";
-import { AuthEntity } from "src/auth/entities/auth.entity";
-import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "src/constants/errorMessages";
-import { EXISTING_TEAM_EXCEPTION, INVALID_TEAM_EXCEPTION, TEAM_NOT_FOUND_EXCEPTION } from "src/constants/exceptions";
-import { DEFENDERS_LENGTH, FORWARDS_LENGTH, GOALKEEPERS_LENGTH, MIDFIELDERS_LENGTH } from "src/constants/lengths";
+import { PrismaService } from "../prisma.service";
+import { AuthEntity } from "../auth/entities/auth.entity";
+import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "../constants/errorMessages";
+import { EXISTING_TEAM_EXCEPTION, INVALID_TEAM_EXCEPTION, TEAM_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
+import { DEFENDERS_LENGTH, FORWARDS_LENGTH, GOALKEEPERS_LENGTH, MIDFIELDERS_LENGTH } from "../constants/lengths";
 import { CreateTeamDto } from "./dto/create-team.dto";
 import { UpdateTeamDto } from "./dto/update-team.dto";
 

@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from
 import { Reflector } from "@nestjs/core";
 import { ROLES_KEY } from "../decorators/roles.decorator";
 import { Role } from "@prisma/client";
-import { USER_NOT_LOGGED_IN_EXCEPTION } from "src/constants/exceptions";
+import { USER_NOT_LOGGED_IN_EXCEPTION } from "../../constants/exceptions";
 
 // TODO: Customize the forbidden access message
 

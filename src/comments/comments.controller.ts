@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
 import { Comment, Recommendation, Role } from "@prisma/client";
-import { AuthEntity } from "src/auth/entities/auth.entity";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { User } from "src/common/decorators/user.decorator";
+import { AuthEntity } from "../auth/entities/auth.entity";
+import { Roles } from "../common/decorators/roles.decorator";
+import { User } from "../common/decorators/user.decorator";
 import { CommentWithCount } from "types/commentWithCount";
 import { CommentsService } from "./comments.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
-import { IsBanned } from "src/common/decorators/is-banned.decorator";
+import { IsBanned } from "../common/decorators/is-banned.decorator";
 
 @Controller(":resourceFriendlyLink/comments")
 export class CommentsController {

@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { UsersService } from "src/users/users.service";
+import { UsersService } from "../../users/users.service";
 import { IS_BANNED_KEY } from "../decorators/is-banned.decorator";
-import { USER_HAS_BEEN_BANNED_EXCEPTION, USER_NOT_LOGGED_IN_EXCEPTION } from "src/constants/exceptions";
+import { USER_HAS_BEEN_BANNED_EXCEPTION, USER_NOT_LOGGED_IN_EXCEPTION } from "../../constants/exceptions";
 
 @Injectable()
 export class IsBannedGuard implements CanActivate {

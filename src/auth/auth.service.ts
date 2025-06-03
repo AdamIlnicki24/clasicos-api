@@ -1,10 +1,12 @@
-import { ConflictException, Injectable } from "@nestjs/common";
-import { PrismaService } from "prisma/prisma.service";
-import { AuthEntity } from "./entities/auth.entity";
+import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
+import { Role, User } from "@prisma/client";
+import { FirebaseService } from "../common/services/firebase.service";
+import { PrismaService } from "../prisma.service";
 import { RegisterDto } from "./dto/register.dto";
-import { EXISTING_USER_EXCEPTION } from "src/constants/exceptions";
-import { FirebaseService } from "src/common/services/firebase.service";
-import { User, Role } from "@prisma/client";
+import { AuthEntity } from "./entities/auth.entity";
+import { EXISTING_EMAIL_EXCEPTION, EXISTING_NICK_EXCEPTION, PASSWORD_LENGTH_EXCEPTION, PRIVACY_POLICY_ACCEPTANCE_EXCEPTION } from "../constants/exceptions";
+import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "../constants/errorMessages";
+import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "../constants/lengths";
 
 @Injectable()
 export class AuthService {
@@ -21,28 +23,49 @@ export class AuthService {
     });
   }
 
-  async createUser(registerDto: RegisterDto): Promise<User> {
-    const userFromDatabase = await this.prismaService.user.findUnique({
+  async createUser({ email, nick, password, isPrivacyPolicyAccepted }: RegisterDto): Promise<User> {
+    const doesEmailExist = await this.prismaService.user.findUnique({
       where: {
-        email: registerDto.email,
+        email,
       },
     });
 
-    if (userFromDatabase) throw new ConflictException(EXISTING_USER_EXCEPTION);
-    
-    // TODO: Handle nick being unique
+    if (doesEmailExist) throw new ConflictException(EXISTING_EMAIL_EXCEPTION);
 
-    const userFromFirebase = await this.firebaseService.createFirebaseUser(registerDto.email, registerDto.password);
-
-    return await this.prismaService.user.create({
-      data: {
-        firebaseId: userFromFirebase.uid,
-        email: registerDto.email,
-        nick: registerDto.nick,
-        acceptedPrivacyPolicyAt: registerDto.isPrivacyPolicyAccepted ? new Date() : null,
-        visitor: { create: {} },
-        role: Role.Visitor,
+    const doesNickExist = await this.prismaService.user.findUnique({
+      where: {
+        nick,
       },
     });
+
+    if (doesNickExist) throw new ConflictException(EXISTING_NICK_EXCEPTION);
+
+    // TODO: Handle nick's length validation
+
+    if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) {
+      throw new BadRequestException(PASSWORD_LENGTH_EXCEPTION);
+    }
+
+    if (!isPrivacyPolicyAccepted) {
+      throw new BadRequestException(PRIVACY_POLICY_ACCEPTANCE_EXCEPTION);
+    }
+
+    const userFromFirebase = await this.firebaseService.createFirebaseUser(email, password);
+
+    return await this.prismaService.user
+      .create({
+        data: {
+          firebaseId: userFromFirebase.uid,
+          email,
+          nick,
+          acceptedPrivacyPolicyAt: isPrivacyPolicyAccepted ? new Date() : null,
+          visitor: { create: {} },
+          role: Role.Visitor,
+        },
+      })
+      .catch((error) => {
+        console.error(error);
+        throw new BadRequestException(SOMETHING_WENT_WRONG_ERROR_MESSAGE);
+      });
   }
 }

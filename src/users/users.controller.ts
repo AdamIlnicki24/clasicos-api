@@ -37,13 +37,13 @@ export class UsersController {
 
   @Roles(Role.Admin)
   @Patch(":uuid/ban")
-  async banUser(@Param("uuid") uuid: string): Promise<Visitor> {
+  async banUser(@Param("uuid") uuid: string): Promise<AuthEntity> {
     return await this.usersService.banUser(uuid);
   }
 
   @Roles(Role.Admin)
   @Patch(":uuid/unban")
-  async unbanUser(@Param("uuid") uuid: string): Promise<Visitor> {
+  async unbanUser(@Param("uuid") uuid: string): Promise<AuthEntity> {
     return await this.usersService.unbanUser(uuid);
   }
 }

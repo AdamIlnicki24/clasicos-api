@@ -56,9 +56,15 @@ export class PlayersService {
 
   // TODO: Think about method below
   async getPlayerByUuid(uuid: string) {
-    return await this.prismaService.player.findUnique({
+    const player = await this.prismaService.player.findUnique({
       where: { uuid },
     });
+
+    if (!player) {
+      throw new NotFoundException(PLAYER_NOT_FOUND_EXCEPTION);
+    }
+
+    return player;
   }
 
   async updatePlayer(uuid: string, { name, surname, nationality, position }: UpdatePlayerDto) {

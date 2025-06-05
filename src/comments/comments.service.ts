@@ -32,7 +32,7 @@ export class CommentsService {
   }
 
   async getComments(): Promise<(Comment & { _count: { recommendations: number } })[]> {
-    return this.prismaService.comment.findMany({
+    return await this.prismaService.comment.findMany({
       include: {
         _count: {
           select: { recommendations: true },

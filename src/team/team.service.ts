@@ -44,6 +44,7 @@ export class TeamService {
       .create({
         data: {
           teamPlayers: { create: team },
+          // TODO: Change to connect below
           userUuid: user.uuid,
         },
         include: { teamPlayers: { include: { player: true } } },

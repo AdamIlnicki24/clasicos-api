@@ -1,5 +1,6 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import { Role, Visitor } from "@prisma/client";
+import { Role } from "@prisma/client";
+import { AuthEntity } from "../auth/entities/auth.entity";
 import { ADMIN_CANNOT_BE_BANNED_EXCEPTION, USER_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
 import { PrismaService } from "../prisma.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -18,7 +19,7 @@ export class UsersService {
     });
   }
 
-  async getUser(uuid: string) {
+  async getUser(uuid: string): Promise<AuthEntity> {
     return await this.prismaService.user.findUnique({
       where: {
         uuid,
@@ -45,18 +46,10 @@ export class UsersService {
     });
   }
 
-  async banUser(userUuid: string): Promise<Visitor> {
+  async banUser(userUuid: string): Promise<AuthEntity> {
     const user = await this.prismaService.user.findUnique({
       where: {
         uuid: userUuid,
-      },
-      select: {
-        role: true,
-        visitor: {
-          select: {
-            userUuid: true,
-          },
-        },
       },
     });
 
@@ -71,18 +64,21 @@ export class UsersService {
     //   throw new BadRequestException(USER_NOT_VISITOR_EXCEPTION);
     // }
 
-    return await this.prismaService.visitor.update({
+    await this.prismaService.visitor.update({
       where: {
         userUuid,
       },
       data: { bannedAt: new Date() },
     });
+
+    return user;
   }
 
-  async unbanUser(userUuid: string): Promise<Visitor> {
+  async unbanUser(userUuid: string): Promise<AuthEntity> {
     const user = await this.prismaService.user.findUnique({
-      where: { uuid: userUuid },
-      select: { visitor: { select: { userUuid: true } } },
+      where: {
+        uuid: userUuid,
+      },
     });
 
     if (!user) {
@@ -94,10 +90,14 @@ export class UsersService {
     //   throw new BadRequestException(USER_NOT_VISITOR_EXCEPTION);
     // }
 
-    return this.prismaService.visitor.update({
+    await this.prismaService.visitor.update({
       where: { userUuid },
-      data: { bannedAt: null },
+      data: {
+        bannedAt: null,
+      },
     });
+
+    return user;
   }
 
   async isUserBanned(uuid: string): Promise<boolean> {

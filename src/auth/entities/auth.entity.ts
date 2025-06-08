@@ -1,4 +1,4 @@
-import { Position, Role } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { TeamEntity } from "../../team/entities/team.entity";
 
 export class AuthEntity {

@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
-import { Comment, Recommendation, Role } from "@prisma/client";
+import { Recommendation, Role } from "@prisma/client";
+import { CommentWithCount } from "types/commentWithCount";
 import { AuthEntity } from "../auth/entities/auth.entity";
+import { IsBanned } from "../common/decorators/is-banned.decorator";
 import { Roles } from "../common/decorators/roles.decorator";
 import { User } from "../common/decorators/user.decorator";
-import { CommentWithCount } from "types/commentWithCount";
 import { CommentsService } from "./comments.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
-import { IsBanned } from "../common/decorators/is-banned.decorator";
 
 @Controller(":resourceFriendlyLink/comments")
 export class CommentsController {
@@ -19,7 +19,7 @@ export class CommentsController {
     @Body() createCommentDto: CreateCommentDto,
     @User() user: AuthEntity,
     @Param("resourceFriendlyLink") resourceFriendlyLink: string,
-  ): Promise<Comment> {
+  ): Promise<CommentWithCount> {
     return await this.commentsService.createComment(createCommentDto, user, resourceFriendlyLink);
   }
 
@@ -28,9 +28,14 @@ export class CommentsController {
     return await this.commentsService.getComments();
   }
 
+  @Get(":uuid")
+  async getCommentByUuid(@Param("uuid") uuid: string): Promise<CommentWithCount> {
+    return await this.commentsService.getCommentByUuid(uuid);
+  }
+
   @Roles(Role.Admin)
   @Delete(":uuid")
-  async deleteComment(@Param("uuid") uuid: string): Promise<Comment> {
+  async deleteComment(@Param("uuid") uuid: string): Promise<CommentWithCount> {
     return await this.commentsService.deleteComment(uuid);
   }
 
@@ -48,6 +53,7 @@ export class CommentsController {
     return await this.commentsService.deleteRecommendation(uuid, user);
   }
 
+  // TODO: Think about roles
   @Get(":uuid/recommendations/count")
   async getRecommendationsCount(@User() user: AuthEntity): Promise<number> {
     return await this.commentsService.getUserRecommendationsCount(user);

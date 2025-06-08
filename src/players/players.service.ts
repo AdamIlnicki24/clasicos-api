@@ -1,5 +1,5 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { Player, Position } from "@prisma/client";
+import { Player, Position, Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma.service";
 import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "../constants/errorMessages";
 import { EXISTING_PLAYER_EXCEPTION, PLAYER_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
@@ -11,18 +11,20 @@ export class PlayersService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async createPlayer({ name, surname, nationality, position }: CreatePlayerDto) {
+    const searchCriteria: Prisma.PlayerWhereInput = {
+      /**
+       * If a player with the given name, surname, and nationality already exists in the database,
+       * throw an exception. This exact validation is necessary because even among the best players
+       * of Barcelona and Real, there have been two players with the same name and surname,
+       * e.g. Luis Suarez from Uruguay and Luis Suarez from Spain.
+       */
+      name: name ?? null,
+      surname,
+      nationality,
+    };
+
     const existingPlayer = await this.prismaService.player.findFirst({
-      where: {
-        /**
-         * If a player with the given name, surname, and nationality already exists in the database,
-         * throw an exception. This exact validation is necessary because even among the best players
-         * of Barcelona and Real, there have been two players with the same name and surname,
-         * e.g. Luis Suarez from Uruguay and Luis Suarez from Spain.
-         */
-        name,
-        surname,
-        nationality,
-      },
+      where: searchCriteria,
     });
 
     if (existingPlayer) throw new ConflictException(EXISTING_PLAYER_EXCEPTION);

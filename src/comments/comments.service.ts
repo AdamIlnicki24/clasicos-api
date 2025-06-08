@@ -1,15 +1,20 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
+import { Recommendation } from "@prisma/client";
+import { CommentWithCount } from "../../types/commentWithCount";
 import { AuthEntity } from "../auth/entities/auth.entity";
 import { COMMENT_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
+import { PrismaService } from "../prisma.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
-import { Comment, Recommendation } from "@prisma/client";
 
 @Injectable()
 export class CommentsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createComment({ content }: CreateCommentDto, user: AuthEntity, resourceFriendlyLink: string): Promise<Comment> {
+  async createComment(
+    { content }: CreateCommentDto,
+    user: AuthEntity,
+    resourceFriendlyLink: string,
+  ): Promise<CommentWithCount> {
     return await this.prismaService.comment.create({
       data: {
         content,
@@ -20,18 +25,34 @@ export class CommentsService {
           },
         },
       },
-    });
-  }
-
-  async getCommentByUuid(uuid: string): Promise<Comment> {
-    return await this.prismaService.comment.findUnique({
-      where: {
-        uuid,
+      include: {
+        _count: {
+          select: { recommendations: true },
+        },
       },
     });
   }
 
-  async getComments(): Promise<(Comment & { _count: { recommendations: number } })[]> {
+  async getCommentByUuid(uuid: string): Promise<CommentWithCount> {
+    const comment = await this.prismaService.comment.findUnique({
+      where: {
+        uuid,
+      },
+      include: {
+        _count: {
+          select: { recommendations: true },
+        },
+      },
+    });
+
+    if (!comment) {
+      throw new NotFoundException(COMMENT_NOT_FOUND_EXCEPTION);
+    }
+
+    return comment;
+  }
+
+  async getComments(): Promise<CommentWithCount[]> {
     return await this.prismaService.comment.findMany({
       include: {
         _count: {
@@ -41,10 +62,15 @@ export class CommentsService {
     });
   }
 
-  async deleteComment(uuid: string): Promise<Comment> {
+  async deleteComment(uuid: string): Promise<CommentWithCount> {
     return await this.prismaService.comment.delete({
       where: {
         uuid,
+      },
+      include: {
+        _count: {
+          select: { recommendations: true },
+        },
       },
     });
   }

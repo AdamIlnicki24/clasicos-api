@@ -1,12 +1,18 @@
 import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
-import { Role, User } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { FirebaseService } from "../common/services/firebase.service";
+import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "../constants/errorMessages";
+import {
+  EXISTING_EMAIL_EXCEPTION,
+  EXISTING_NICK_EXCEPTION,
+  PASSWORD_LENGTH_EXCEPTION,
+  PRIVACY_POLICY_ACCEPTANCE_EXCEPTION,
+} from "../constants/exceptions";
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "../constants/lengths";
 import { PrismaService } from "../prisma.service";
+import { UserEntity } from "../users/entities/user.entity";
 import { RegisterDto } from "./dto/register.dto";
 import { AuthEntity } from "./entities/auth.entity";
-import { EXISTING_EMAIL_EXCEPTION, EXISTING_NICK_EXCEPTION, PASSWORD_LENGTH_EXCEPTION, PRIVACY_POLICY_ACCEPTANCE_EXCEPTION } from "../constants/exceptions";
-import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "../constants/errorMessages";
-import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "../constants/lengths";
 
 @Injectable()
 export class AuthService {
@@ -20,10 +26,13 @@ export class AuthService {
       where: {
         firebaseId: uid,
       },
+      include: {
+        visitor: true,
+      },
     });
   }
 
-  async createUser({ email, nick, password, isPrivacyPolicyAccepted }: RegisterDto): Promise<User> {
+  async createUser({ email, nick, password, isPrivacyPolicyAccepted }: RegisterDto): Promise<UserEntity> {
     const doesEmailExist = await this.prismaService.user.findUnique({
       where: {
         email,

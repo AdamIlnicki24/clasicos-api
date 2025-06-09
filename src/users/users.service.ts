@@ -1,9 +1,9 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { Role } from "@prisma/client";
-import { AuthEntity } from "../auth/entities/auth.entity";
 import { ADMIN_CANNOT_BE_BANNED_EXCEPTION, USER_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
 import { PrismaService } from "../prisma.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { UserEntity } from "./entities/user.entity";
 
 @Injectable()
 export class UsersService {
@@ -19,7 +19,7 @@ export class UsersService {
     });
   }
 
-  async getUser(uuid: string): Promise<AuthEntity> {
+  async getUser(uuid: string): Promise<UserEntity> {
     return await this.prismaService.user.findUnique({
       where: {
         uuid,
@@ -46,7 +46,7 @@ export class UsersService {
     });
   }
 
-  async banUser(userUuid: string): Promise<AuthEntity> {
+  async banUser(userUuid: string): Promise<UserEntity> {
     const user = await this.prismaService.user.findUnique({
       where: {
         uuid: userUuid,
@@ -74,7 +74,7 @@ export class UsersService {
     return user;
   }
 
-  async unbanUser(userUuid: string): Promise<AuthEntity> {
+  async unbanUser(userUuid: string): Promise<UserEntity> {
     const user = await this.prismaService.user.findUnique({
       where: {
         uuid: userUuid,
@@ -99,6 +99,8 @@ export class UsersService {
 
     return user;
   }
+
+  // TODO: Handle nick
 
   async isUserBanned(uuid: string): Promise<boolean> {
     const banned = await this.prismaService.visitor.findUnique({

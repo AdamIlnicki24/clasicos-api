@@ -1,3 +1,1 @@
-export class PlayerEntity {
-    
-}
+export class PlayerEntity {}

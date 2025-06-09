@@ -1,1 +1,2 @@
-export class Comment {}
+// TODO: Think about entities
+export class CommentEntity {}

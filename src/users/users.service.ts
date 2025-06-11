@@ -1,6 +1,10 @@
-import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { Role } from "@prisma/client";
-import { ADMIN_CANNOT_BE_BANNED_EXCEPTION, USER_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
+import {
+  ADMIN_CANNOT_BE_BANNED_EXCEPTION,
+  EXISTING_NICK_EXCEPTION,
+  USER_NOT_FOUND_EXCEPTION,
+} from "../constants/exceptions";
 import { PrismaService } from "../prisma.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserEntity } from "./entities/user.entity";
@@ -27,7 +31,15 @@ export class UsersService {
     });
   }
 
-  async updateUser(uuid: string, { favoriteClub, favoriteFootballer }: UpdateUserDto) {
+  async updateUser(uuid: string, { nick, favoriteClub, favoriteFootballer }: UpdateUserDto) {
+    const doesNickExist = await this.prismaService.visitor.findUnique({
+      where: {
+        nick,
+      },
+    });
+
+    if (doesNickExist) throw new ConflictException(EXISTING_NICK_EXCEPTION);
+
     return await this.prismaService.user.update({
       where: {
         uuid,
@@ -35,6 +47,7 @@ export class UsersService {
       data: {
         visitor: {
           update: {
+            nick,
             favoriteClub,
             favoriteFootballer,
           },

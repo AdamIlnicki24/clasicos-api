@@ -32,7 +32,7 @@ export class AuthService {
     });
   }
 
-  async createUser({ email, nick, password, isPrivacyPolicyAccepted }: RegisterDto): Promise<UserEntity> {
+  async createUser({ email, password, isPrivacyPolicyAccepted }: RegisterDto): Promise<UserEntity> {
     const doesEmailExist = await this.prismaService.user.findUnique({
       where: {
         email,
@@ -40,14 +40,6 @@ export class AuthService {
     });
 
     if (doesEmailExist) throw new ConflictException(EXISTING_EMAIL_EXCEPTION);
-
-    const doesNickExist = await this.prismaService.user.findUnique({
-      where: {
-        nick,
-      },
-    });
-
-    if (doesNickExist) throw new ConflictException(EXISTING_NICK_EXCEPTION);
 
     // TODO: Handle nick's length validation
 
@@ -66,7 +58,6 @@ export class AuthService {
         data: {
           firebaseId: userFromFirebase.uid,
           email,
-          nick,
           acceptedPrivacyPolicyAt: isPrivacyPolicyAccepted ? new Date() : null,
           visitor: { create: {} },
           role: Role.Visitor,

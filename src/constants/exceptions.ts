@@ -21,5 +21,7 @@ export const ADMIN_CANNOT_BE_BANNED_EXCEPTION = "Nie możesz zbanować administr
 export const USER_HAS_BEEN_BANNED_EXCEPTION = "Zostałeś zbanowany i nie możesz wykonać tej akcji.";
 export const USER_NOT_LOGGED_IN_EXCEPTION = "Brak dostępu - musisz się zalogować.";
 export const PASSWORD_LENGTH_EXCEPTION = `Hasło musi mieć od ${PASSWORD_MIN_LENGTH} do ${PASSWORD_MAX_LENGTH} znaków.`;
+export const PASSWORD_MIN_LENGTH_EXCEPTION = `Hasło musi mieć co najmniej ${PASSWORD_MIN_LENGTH} znaków.`;
+export const PASSWORD_MAX_LENGTH_EXCEPTION = `Hasło może mieć co najwyżej ${PASSWORD_MAX_LENGTH} znaków.`;
 export const NICK_MAX_LENGTH_EXCEPTION = `Nick może mieć maksymalnie ${NICK_MAX_LENGTH} znaki.`;
 export const PRIVACY_POLICY_ACCEPTANCE_EXCEPTION = "Musisz zaakceptować politykę prywatności, aby się zarejestrować.";

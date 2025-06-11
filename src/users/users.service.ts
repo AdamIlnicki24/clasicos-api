@@ -13,7 +13,7 @@ import { UserEntity } from "./entities/user.entity";
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getUsers() {
+  async getUsers(): Promise<UserEntity[]> {
     return await this.prismaService.user.findMany({
       where: {
         role: {
@@ -31,7 +31,7 @@ export class UsersService {
     });
   }
 
-  async updateUser(uuid: string, { nick, favoriteClub, favoriteFootballer }: UpdateUserDto) {
+  async updateUser(uuid: string, { nick, favoriteClub, favoriteFootballer }: UpdateUserDto): Promise<UserEntity> {
     const doesNickExist = await this.prismaService.visitor.findUnique({
       where: {
         nick,

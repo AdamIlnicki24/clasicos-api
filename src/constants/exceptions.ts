@@ -1,4 +1,5 @@
 import {
+  COMMENT_CONTENT_MAX_LENGTH,
   DEFENDERS_LENGTH,
   FORWARDS_LENGTH,
   GOALKEEPERS_LENGTH,
@@ -24,4 +25,5 @@ export const PASSWORD_LENGTH_EXCEPTION = `Hasło musi mieć od ${PASSWORD_MIN_LE
 export const PASSWORD_MIN_LENGTH_EXCEPTION = `Hasło musi mieć co najmniej ${PASSWORD_MIN_LENGTH} znaków.`;
 export const PASSWORD_MAX_LENGTH_EXCEPTION = `Hasło może mieć co najwyżej ${PASSWORD_MAX_LENGTH} znaków.`;
 export const NICK_MAX_LENGTH_EXCEPTION = `Nick może mieć maksymalnie ${NICK_MAX_LENGTH} znaki.`;
+export const COMMENT_CONTENT_MAX_LENGTH_EXCEPTION = `Komentarz może mieć maksymalnie ${COMMENT_CONTENT_MAX_LENGTH} znaki.`;
 export const PRIVACY_POLICY_ACCEPTANCE_EXCEPTION = "Musisz zaakceptować politykę prywatności, aby się zarejestrować.";

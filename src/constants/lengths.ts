@@ -10,4 +10,6 @@ export const NICK_MAX_LENGTH = 63;
 export const FAVORITE_CLUB_MAX_LENGTH = 127;
 export const FAVORITE_FOOTBALLER_MAX_LENGTH = 127;
 
+export const COMMENT_CONTENT_MAX_LENGTH = 1023;
+
 // TODO: Extract rest of lengths to constants

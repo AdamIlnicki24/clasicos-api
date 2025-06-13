@@ -43,7 +43,7 @@ model Visitor {
 
 model Comment {
   uuid                 String @id @default(uuid())
-  content              String @db.VarChar(511)
+  content              String @db.VarChar(1023)
   resourceFriendlyLink String @map("resource_friendly_link") @db.VarChar(255)
 
   createdAt DateTime @default(now()) @map("created_at")

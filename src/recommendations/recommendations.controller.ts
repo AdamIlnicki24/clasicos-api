@@ -30,6 +30,7 @@ export class RecommendationsController {
   @Get("comments/:commentUuid/recommendations")
   async getCommentRecommendationsCount(@Param("commentUuid") commentUuid: string): Promise<{ count: number }> {
     const count = await this.recommendationsService.getCommentRecommendationsCount(commentUuid);
+
     return { count };
   }
 

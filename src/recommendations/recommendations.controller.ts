@@ -1,21 +1,24 @@
-import { Controller, Get, Param, Post } from "@nestjs/common";
-import { RecommendationsService } from "./recommendations.service";
-import { Role, Recommendation } from "@prisma/client";
-import { AuthEntity } from "../auth/entities/auth.entity";
+import { Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Recommendation, Role } from "@prisma/client";
 import { IsBanned } from "../common/decorators/is-banned.decorator";
 import { Roles } from "../common/decorators/roles.decorator";
 import { User } from "../common/decorators/user.decorator";
+import { UserEntity } from "../users/entities/user.entity";
+import { RecommendationsService } from "./recommendations.service";
 
 @Controller()
 export class RecommendationsController {
   constructor(private readonly recommendationsService: RecommendationsService) {}
 
   @Roles(Role.Admin, Role.Visitor)
-    @IsBanned()
-    @Post(":resourceFriendlyLink/comments/:commentUuid/recommendations")
-    async createRecommendation(@Param("uuid") uuid: string, @User() user: AuthEntity): Promise<Recommendation> {
-      return await this.recommendationsService.createRecommendation(uuid, user);
-    }
+  @IsBanned()
+  @Post("comments/:commentUuid/recommendations")
+  async createRecommendation(
+    @Param("commentUuid") commentUuid: string,
+    @User() user: UserEntity,
+  ): Promise<Recommendation> {
+    return await this.recommendationsService.createRecommendation(commentUuid, user);
+  }
 
   @Get("users/:userUuid/recommendations")
   async getUserRecommendationsCount(@Param("userUuid") userUuid: string): Promise<{ count: number }> {
@@ -28,5 +31,14 @@ export class RecommendationsController {
   async getCommentRecommendationsCount(@Param("commentUuid") commentUuid: string): Promise<{ count: number }> {
     const count = await this.recommendationsService.getCommentRecommendationsCount(commentUuid);
     return { count };
+  }
+
+  @Delete("comments/:commentUuid/recommendations/:recommendationUuid")
+  async deleteRecommendation(
+    @Param("commentUuid") commentUuid: string,
+    @Param("recommendationUuid") recommendationUuid: string,
+    @User() user: UserEntity,
+  ): Promise<Recommendation> {
+    return await this.recommendationsService.deleteRecommendation(commentUuid, recommendationUuid, user);
   }
 }

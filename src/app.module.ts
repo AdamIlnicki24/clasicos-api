@@ -16,6 +16,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { RolesGuard } from "./common/guards/roles.guard";
 import { IsBannedGuard } from "./common/guards/is-banned.guard";
 import { UsersService } from "./users/users.service";
+import { RecommendationsModule } from './recommendations/recommendations.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UsersService } from "./users/users.service";
     PlayersModule,
     CommentsModule,
     TeamModule,
+    RecommendationsModule,
   ],
   controllers: [AppController],
   providers: [

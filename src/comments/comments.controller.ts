@@ -56,6 +56,6 @@ export class CommentsController {
   // TODO: Think about roles
   @Get(":uuid/recommendations/count")
   async getRecommendationsCount(@User() user: AuthEntity): Promise<number> {
-    return await this.commentsService.getUserRecommendationsCount(user);
+    return await this.commentsService.getRecommendationsCount(user);
   }
 }

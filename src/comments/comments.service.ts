@@ -111,7 +111,7 @@ export class CommentsService {
     });
   }
 
-  async getUserRecommendationsCount(user: AuthEntity): Promise<number> {
+  async getRecommendationsCount(user: AuthEntity): Promise<number> {
     return await this.prismaService.recommendation.count({
       where: {
         comment: {

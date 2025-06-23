@@ -20,6 +20,7 @@ export class UsersService {
           not: Role.Admin,
         },
       },
+      include: { visitor: true },
     });
   }
 
@@ -28,6 +29,7 @@ export class UsersService {
       where: {
         uuid,
       },
+      include: { visitor: true },
     });
   }
 

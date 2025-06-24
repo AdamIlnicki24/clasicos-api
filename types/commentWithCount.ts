@@ -4,4 +4,10 @@ export type CommentWithCount = Comment & {
   _count: {
     recommendations: number;
   };
+  user: {
+    uuid: string;
+    visitor: {
+      nick?: string;
+    };
+  };
 };

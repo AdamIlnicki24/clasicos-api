@@ -28,6 +28,11 @@ export class CommentsService {
         _count: {
           select: { recommendations: true },
         },
+        user: {
+          include: {
+            visitor: true,
+          },
+        },
       },
     });
   }
@@ -40,6 +45,11 @@ export class CommentsService {
       include: {
         _count: {
           select: { recommendations: true },
+        },
+        user: {
+          include: {
+            visitor: true,
+          },
         },
       },
     });
@@ -57,6 +67,11 @@ export class CommentsService {
         _count: {
           select: { recommendations: true },
         },
+        user: {
+          include: {
+            visitor: true,
+          },
+        },
       },
     });
   }
@@ -69,6 +84,11 @@ export class CommentsService {
       include: {
         _count: {
           select: { recommendations: true },
+        },
+        user: {
+          include: {
+            visitor: true,
+          },
         },
       },
     });

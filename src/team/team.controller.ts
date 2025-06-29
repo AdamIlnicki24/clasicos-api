@@ -20,7 +20,7 @@ export class TeamController {
   @Roles(Role.Admin, Role.Visitor)
   @Get("me")
   async getMyTeam(@User() user: AuthEntity): Promise<Team> {
-    return await this.teamService.getTeamByUuid(user.team?.uuid);
+    return await this.teamService.getTeamByUserUuid(user.uuid);
   }
 
   @Roles(Role.Admin, Role.Visitor)

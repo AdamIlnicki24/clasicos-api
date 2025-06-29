@@ -77,6 +77,25 @@ export class TeamService {
     return team;
   }
 
+  async getTeamByUserUuid(userUuid: string) {
+    const team = await this.prismaService.team.findUnique({
+      where: {
+        userUuid,
+      },
+      include: {
+        teamPlayers: {
+          include: {
+            player: true,
+          },
+        },
+      },
+    });
+
+    if (!team) throw new NotFoundException(TEAM_NOT_FOUND_EXCEPTION);
+
+    return team;
+  }
+
   async updateMyTeam(
     { goalkeepers, defenders, midfielders, forwards }: UpdateTeamDto,
     user: AuthEntity,

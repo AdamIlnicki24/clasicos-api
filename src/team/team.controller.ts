@@ -26,7 +26,7 @@ export class TeamController {
   @Roles(Role.Admin, Role.Visitor)
   @Get(":uuid")
   async getTeamByUuid(@Param("uuid") uuid: string): Promise<Team> {
-    return await this.teamService.getTeamByUuid(uuid);
+    return await this.teamService.getTeamByUserUuid(uuid);
   }
 
   @Roles(Role.Admin, Role.Visitor)

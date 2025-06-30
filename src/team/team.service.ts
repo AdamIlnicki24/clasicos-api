@@ -56,27 +56,6 @@ export class TeamService {
       });
   }
 
-  async getTeamByUuid(uuid?: string) {
-    if (!uuid) throw new NotFoundException(TEAM_NOT_FOUND_EXCEPTION);
-
-    const team = await this.prismaService.team.findUnique({
-      where: {
-        uuid,
-      },
-      include: {
-        teamPlayers: {
-          include: {
-            player: true,
-          },
-        },
-      },
-    });
-
-    if (!team) throw new NotFoundException(TEAM_NOT_FOUND_EXCEPTION);
-
-    return team;
-  }
-
   async getTeamByUserUuid(userUuid: string) {
     const team = await this.prismaService.team.findUnique({
       where: {

@@ -3,9 +3,10 @@ import { Role } from "@prisma/client";
 import { AuthEntity } from "../auth/entities/auth.entity";
 import { Roles } from "../common/decorators/roles.decorator";
 import { User } from "../common/decorators/user.decorator";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { UsersService } from "./users.service";
+import { UpdateUserNickDto } from "./dto/update-user-nick.dto";
+import { UpdateUserProfileDto } from "./dto/update-user-profile.dto";
 import { UserEntity } from "./entities/user.entity";
+import { UsersService } from "./users.service";
 
 @Controller("users")
 export class UsersController {
@@ -31,9 +32,18 @@ export class UsersController {
   }
 
   @Roles(Role.Admin, Role.Visitor)
-  @Patch("me")
-  async updateMe(@User() user: AuthEntity, @Body() updateUserDto: UpdateUserDto): Promise<UserEntity> {
-    return await this.usersService.updateUser(user.uuid, updateUserDto);
+  @Patch("me/profile")
+  async updateMyProfile(
+    @User() user: AuthEntity,
+    @Body() updateUserProfileDto: UpdateUserProfileDto,
+  ): Promise<UserEntity> {
+    return await this.usersService.updateUserProfile(user.uuid, updateUserProfileDto);
+  }
+
+  @Roles(Role.Admin, Role.Visitor)
+  @Patch("me/nick")
+  async updateMyNick(@User() user: AuthEntity, @Body() updateUserNickDto: UpdateUserNickDto): Promise<UserEntity> {
+    return await this.usersService.updateUserNick(user.uuid, updateUserNickDto);
   }
 
   @Roles(Role.Admin)

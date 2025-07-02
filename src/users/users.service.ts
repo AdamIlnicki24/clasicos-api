@@ -6,7 +6,8 @@ import {
   USER_NOT_FOUND_EXCEPTION,
 } from "../constants/exceptions";
 import { PrismaService } from "../prisma.service";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { UpdateUserNickDto } from "./dto/update-user-nick.dto";
+import { UpdateUserProfileDto } from "./dto/update-user-profile.dto";
 import { UserEntity } from "./entities/user.entity";
 
 @Injectable()
@@ -33,12 +34,36 @@ export class UsersService {
     });
   }
 
-  async updateUser(uuid: string, { nick, favoriteClub, favoriteFootballer }: UpdateUserDto): Promise<UserEntity> {
+  async updateUserProfile(
+    uuid: string,
+    { favoriteClub, favoriteFootballer }: UpdateUserProfileDto,
+  ): Promise<UserEntity> {
+    return await this.prismaService.user.update({
+      where: {
+        uuid,
+      },
+      data: {
+        visitor: {
+          update: {
+            favoriteClub,
+            favoriteFootballer,
+          },
+        },
+      },
+      include: {
+        visitor: true,
+      },
+    });
+  }
+
+  async updateUserNick(uuid: string, { nick }: UpdateUserNickDto): Promise<UserEntity> {
     const doesNickExist = await this.prismaService.visitor.findUnique({
       where: {
         nick,
       },
     });
+
+    // TODO: Add "not" value to avoid throwing exception while changing own nick
 
     if (doesNickExist) throw new ConflictException(EXISTING_NICK_EXCEPTION);
 
@@ -50,8 +75,6 @@ export class UsersService {
         visitor: {
           update: {
             nick,
-            favoriteClub,
-            favoriteFootballer,
           },
         },
       },

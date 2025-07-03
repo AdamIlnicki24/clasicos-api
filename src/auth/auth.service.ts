@@ -4,11 +4,8 @@ import { FirebaseService } from "../common/services/firebase.service";
 import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "../constants/errorMessages";
 import {
   EXISTING_EMAIL_EXCEPTION,
-  EXISTING_NICK_EXCEPTION,
-  PASSWORD_LENGTH_EXCEPTION,
-  PRIVACY_POLICY_ACCEPTANCE_EXCEPTION,
+  PRIVACY_POLICY_ACCEPTANCE_EXCEPTION
 } from "../constants/exceptions";
-import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "../constants/lengths";
 import { PrismaService } from "../prisma.service";
 import { UserEntity } from "../users/entities/user.entity";
 import { RegisterDto } from "./dto/register.dto";
@@ -43,10 +40,8 @@ export class AuthService {
 
     // TODO: Handle nick's length validation
 
-    if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) {
-      throw new BadRequestException(PASSWORD_LENGTH_EXCEPTION);
-    }
 
+    // TODO: Handle exeption below in DTO
     if (!isPrivacyPolicyAccepted) {
       throw new BadRequestException(PRIVACY_POLICY_ACCEPTANCE_EXCEPTION);
     }
@@ -58,13 +53,14 @@ export class AuthService {
         data: {
           firebaseId: userFromFirebase.uid,
           email,
-          acceptedPrivacyPolicyAt: isPrivacyPolicyAccepted ? new Date() : null,
+          acceptedPrivacyPolicyAt: new Date(),
           visitor: { create: {} },
           role: Role.Visitor,
         },
       })
       .catch((error) => {
         console.error(error);
+        // TODO: Think about deleting firebase user
         throw new BadRequestException(SOMETHING_WENT_WRONG_ERROR_MESSAGE);
       });
   }

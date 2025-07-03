@@ -57,9 +57,29 @@ export class UsersService {
   }
 
   async updateUserNick(uuid: string, { nick }: UpdateUserNickDto): Promise<UserEntity> {
-    const doesNickExist = await this.prismaService.visitor.findUnique({
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        uuid,
+      },
+      include: {
+        visitor: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(USER_NOT_FOUND_EXCEPTION);
+    }
+
+    const currentNick = user.visitor?.nick;
+
+    if (nick === currentNick) return user;
+
+    const doesNickExist = await this.prismaService.visitor.findFirst({
       where: {
         nick,
+        userUuid: {
+          not: uuid,
+        },
       },
     });
 

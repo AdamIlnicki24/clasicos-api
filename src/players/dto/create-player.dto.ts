@@ -17,7 +17,7 @@ export class CreatePlayerDto {
   @MaxLength(127)
   surname: string;
 
-  // TODO: Implement package to show then flag and country code
+  // TODO: Think about changing max length to 2
   @IsString()
   @MaxLength(127)
   nationality: string;

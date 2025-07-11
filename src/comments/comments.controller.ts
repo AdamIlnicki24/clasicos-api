@@ -24,8 +24,8 @@ export class CommentsController {
   }
 
   @Get()
-  async getComments(): Promise<CommentWithCount[]> {
-    return await this.commentsService.getComments();
+  async getComments(@Param("resourceFriendlyLink") resourceFriendlyLink: string): Promise<CommentWithCount[]> {
+    return await this.commentsService.getComments(resourceFriendlyLink);
   }
 
   @Get(":uuid")

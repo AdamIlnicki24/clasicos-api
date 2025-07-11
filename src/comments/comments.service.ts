@@ -61,8 +61,9 @@ export class CommentsService {
     return comment;
   }
 
-  async getComments(): Promise<CommentWithCount[]> {
+  async getComments(resourceFriendlyLink: string): Promise<CommentWithCount[]> {
     return await this.prismaService.comment.findMany({
+      where: { resourceFriendlyLink },
       include: {
         _count: {
           select: { recommendations: true },
@@ -72,6 +73,9 @@ export class CommentsService {
             visitor: true,
           },
         },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
   }

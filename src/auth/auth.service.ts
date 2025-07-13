@@ -3,8 +3,7 @@ import { Role } from "@prisma/client";
 import { FirebaseService } from "../common/services/firebase.service";
 import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "../constants/errorMessages";
 import {
-  EXISTING_EMAIL_EXCEPTION,
-  PRIVACY_POLICY_ACCEPTANCE_EXCEPTION
+  EXISTING_EMAIL_EXCEPTION
 } from "../constants/exceptions";
 import { PrismaService } from "../prisma.service";
 import { UserEntity } from "../users/entities/user.entity";
@@ -29,7 +28,7 @@ export class AuthService {
     });
   }
 
-  async createUser({ email, password, isPrivacyPolicyAccepted }: RegisterDto): Promise<UserEntity> {
+  async createUser({ email, password }: RegisterDto): Promise<UserEntity> {
     const doesEmailExist = await this.prismaService.user.findUnique({
       where: {
         email,
@@ -40,12 +39,6 @@ export class AuthService {
 
     // TODO: Handle nick's length validation
 
-
-    // TODO: Handle exeption below in DTO
-    if (!isPrivacyPolicyAccepted) {
-      throw new BadRequestException(PRIVACY_POLICY_ACCEPTANCE_EXCEPTION);
-    }
-
     const userFromFirebase = await this.firebaseService.createFirebaseUser(email, password);
 
     return await this.prismaService.user
@@ -53,7 +46,6 @@ export class AuthService {
         data: {
           firebaseId: userFromFirebase.uid,
           email,
-          acceptedPrivacyPolicyAt: new Date(),
           visitor: { create: {} },
           role: Role.Visitor,
         },

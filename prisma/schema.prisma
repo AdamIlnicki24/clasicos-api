@@ -17,7 +17,6 @@ model User {
   visitor Visitor?
 
   createdAt               DateTime  @default(now()) @map("created_at")
-  acceptedPrivacyPolicyAt DateTime? @map("accepted_privacy_policy_at")
   updatedAt               DateTime  @updatedAt @map("updated_at")
 
   comments        Comment[]

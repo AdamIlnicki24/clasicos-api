@@ -31,4 +31,3 @@ export const NICK_MAX_LENGTH_EXCEPTION = `Nick może mieć maksymalnie ${NICK_MA
 export const FAVORITE_CLUB_MAX_LENGTH_EXCEPTION = `W pole z ulubionym klubem można wpisać maksymalnie ${FAVORITE_CLUB_MAX_LENGTH} znaków.`;
 export const FAVORITE_FOOTBALLER_MAX_LENGTH_EXCEPTION = `W pole z ulubionym piłkarzem można wpisać maksymalnie ${FAVORITE_FOOTBALLER_MAX_LENGTH} znaków.`;
 export const COMMENT_CONTENT_MAX_LENGTH_EXCEPTION = `Komentarz może mieć maksymalnie ${COMMENT_CONTENT_MAX_LENGTH} znaki.`;
-export const PRIVACY_POLICY_ACCEPTANCE_EXCEPTION = "Musisz zaakceptować politykę prywatności, aby się zarejestrować.";

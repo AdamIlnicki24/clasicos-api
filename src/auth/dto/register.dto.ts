@@ -13,7 +13,4 @@ export class RegisterDto {
   @MinLength(PASSWORD_MIN_LENGTH, { message: PASSWORD_MIN_LENGTH_EXCEPTION })
   @MaxLength(PASSWORD_MAX_LENGTH, { message: PASSWORD_MAX_LENGTH_EXCEPTION })
   password: string;
-
-  @IsBoolean()
-  isPrivacyPolicyAccepted: boolean;
 }

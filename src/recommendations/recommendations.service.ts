@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import {
   COMMENT_NOT_FOUND_EXCEPTION,
+  EXISTING_RECOMMENDATION_EXCEPTION,
   RECOMMENDATION_NOT_FOUND_EXCEPTION,
   USER_NOT_FOUND_EXCEPTION,
 } from "../constants/exceptions";
@@ -13,6 +14,17 @@ export class RecommendationsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async createRecommendation(commentUuid: string, user: UserEntity) {
+    const doesRecommendationExist = await this.prismaService.recommendation.findUnique({
+      where: {
+        userUuid_commentUuid: {
+          userUuid: user.uuid,
+          commentUuid,
+        },
+      },
+    });
+
+    if (doesRecommendationExist) throw new ConflictException(EXISTING_RECOMMENDATION_EXCEPTION);
+
     const comment = await this.prismaService.comment.findUnique({
       where: {
         uuid: commentUuid,
@@ -35,6 +47,65 @@ export class RecommendationsService {
         },
       },
     });
+  }
+
+  async toggleRecommendation(
+    commentUuid: string,
+    user: UserEntity,
+  ): Promise<{ hasRecommended: boolean; count: number }> {
+    const comment = await this.prismaService.comment.findUnique({
+      where: {
+        uuid: commentUuid,
+      },
+    });
+
+    if (!comment) throw new NotFoundException(COMMENT_NOT_FOUND_EXCEPTION);
+
+    const doesRecommendationExist = await this.prismaService.recommendation.findUnique({
+      where: {
+        userUuid_commentUuid: {
+          userUuid: user.uuid,
+          commentUuid,
+        },
+      },
+    });
+
+    if (doesRecommendationExist) {
+      await this.prismaService.recommendation.delete({
+        where: {
+          userUuid_commentUuid: {
+            userUuid: user.uuid,
+            commentUuid,
+          },
+        },
+      });
+    } else {
+      await this.prismaService.recommendation.create({
+        data: {
+          user: {
+            connect: {
+              uuid: user.uuid,
+            },
+          },
+          comment: {
+            connect: {
+              uuid: commentUuid,
+            },
+          },
+        },
+      });
+    }
+
+    const count = await this.prismaService.recommendation.count({
+      where: {
+        commentUuid,
+      },
+    });
+
+    return {
+      hasRecommended: !doesRecommendationExist,
+      count,
+    };
   }
 
   async getUserRecommendationsCount(userUuid: string): Promise<number> {
@@ -71,14 +142,22 @@ export class RecommendationsService {
     });
   }
 
-  async deleteRecommendation(
-    commentUuid: string,
-    recommendationUuid: string,
-    user: UserEntity,
-  ): Promise<Recommendation> {
+  async countByUserAndComment(userUuid: string, commentUuid: string): Promise<number> {
+    return await this.prismaService.recommendation.count({
+      where: {
+        userUuid,
+        commentUuid,
+      },
+    });
+  }
+
+  async deleteRecommendation(commentUuid: string, user: UserEntity): Promise<Recommendation> {
     const recommendation = await this.prismaService.recommendation.findUnique({
       where: {
-        uuid: recommendationUuid,
+        userUuid_commentUuid: {
+          userUuid: user.uuid,
+          commentUuid,
+        },
       },
     });
 

@@ -20,6 +20,16 @@ export class RecommendationsController {
     return await this.recommendationsService.createRecommendation(commentUuid, user);
   }
 
+  @Roles(Role.Admin, Role.Visitor)
+  @IsBanned()
+  @Post("comments/:commentUuid/recommendation/toggle")
+  async toggleRecommendation(
+    @Param("commentUuid") commentUuid: string,
+    @User() user: UserEntity,
+  ): Promise<{ hasRecommended: boolean; count: number }> {
+    return await this.recommendationsService.toggleRecommendation(commentUuid, user);
+  }
+
   @Get("users/:userUuid/recommendations")
   async getUserRecommendationsCount(@Param("userUuid") userUuid: string): Promise<{ count: number }> {
     const count = await this.recommendationsService.getUserRecommendationsCount(userUuid);
@@ -34,12 +44,23 @@ export class RecommendationsController {
     return { count };
   }
 
-  @Delete("comments/:commentUuid/recommendations/:recommendationUuid")
+  @Get("comments/:commentUuid/recommendations/me")
+  async hasUserRecommendedComment(
+    @Param("commentUuid") commentUuid: string,
+    @User() user: UserEntity,
+  ): Promise<{ hasRecommended: boolean }> {
+    const count = await this.recommendationsService.countByUserAndComment(user.uuid, commentUuid);
+
+    return { hasRecommended: count > 0 };
+  }
+
+  @Roles(Role.Admin, Role.Visitor)
+  @IsBanned()
+  @Delete("comments/:commentUuid/recommendations")
   async deleteRecommendation(
     @Param("commentUuid") commentUuid: string,
-    @Param("recommendationUuid") recommendationUuid: string,
     @User() user: UserEntity,
   ): Promise<Recommendation> {
-    return await this.recommendationsService.deleteRecommendation(commentUuid, recommendationUuid, user);
+    return await this.recommendationsService.deleteRecommendation(commentUuid, user);
   }
 }

@@ -13,6 +13,7 @@ import {
 
 export const EXISTING_EMAIL_EXCEPTION = "Użytkownik o podanym adresie e-mail już istnieje.";
 export const EXISTING_NICK_EXCEPTION = "Użytkownik o podanym nicku już istnieje.";
+export const EXISTING_RECOMMENDATION_EXCEPTION = "Już zarekomendowałeś ten komentarz";
 export const EXISTING_PLAYER_EXCEPTION = "Ten piłkarz już istnieje.";
 export const PLAYER_NOT_FOUND_EXCEPTION = "Wybrany gracz nie istnieje.";
 export const COMMENT_NOT_FOUND_EXCEPTION = "Nie znaleziono komentarza.";

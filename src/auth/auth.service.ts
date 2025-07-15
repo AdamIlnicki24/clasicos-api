@@ -2,9 +2,7 @@ import { BadRequestException, ConflictException, Injectable } from "@nestjs/comm
 import { Role } from "@prisma/client";
 import { FirebaseService } from "../common/services/firebase.service";
 import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "../constants/errorMessages";
-import {
-  EXISTING_EMAIL_EXCEPTION
-} from "../constants/exceptions";
+import { EXISTING_EMAIL_EXCEPTION } from "../constants/exceptions";
 import { PrismaService } from "../prisma.service";
 import { UserEntity } from "../users/entities/user.entity";
 import { RegisterDto } from "./dto/register.dto";
@@ -36,8 +34,6 @@ export class AuthService {
     });
 
     if (doesEmailExist) throw new ConflictException(EXISTING_EMAIL_EXCEPTION);
-
-    // TODO: Handle nick's length validation
 
     const userFromFirebase = await this.firebaseService.createFirebaseUser(email, password);
 

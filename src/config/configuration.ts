@@ -1,6 +1,6 @@
 import { FirebaseConfig } from "../../types/firebaseConfig";
 
-// TODO: Check if file below is correct
+// TODO: Think about TS rules
 
 export default (): FirebaseConfig => ({
   port: parseInt(process.env.PORT) || 8080,

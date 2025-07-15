@@ -22,7 +22,7 @@ export class RecommendationsController {
 
   @Roles(Role.Admin, Role.Visitor)
   @IsBanned()
-  @Post("comments/:commentUuid/recommendation/toggle")
+  @Post("comments/:commentUuid/recommendations/toggle")
   async toggleRecommendation(
     @Param("commentUuid") commentUuid: string,
     @User() user: UserEntity,
@@ -44,6 +44,8 @@ export class RecommendationsController {
     return { count };
   }
 
+  @Roles(Role.Admin, Role.Visitor)
+  @IsBanned()
   @Get("comments/:commentUuid/recommendations/me")
   async hasUserRecommendedComment(
     @Param("commentUuid") commentUuid: string,

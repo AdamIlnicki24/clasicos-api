@@ -4,8 +4,6 @@ import { ROLES_KEY } from "../decorators/roles.decorator";
 import { Role } from "@prisma/client";
 import { USER_NOT_LOGGED_IN_EXCEPTION } from "../../constants/exceptions";
 
-// TODO: Customize the forbidden access message
-
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}

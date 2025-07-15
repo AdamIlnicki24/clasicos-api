@@ -6,9 +6,11 @@ import {
   FORWARDS_LENGTH,
   GOALKEEPERS_LENGTH,
   MIDFIELDERS_LENGTH,
+  NATIONALITY_CODE_LENGTH,
   NICK_MAX_LENGTH,
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
+  PLAYER_NAME_MAX_LENGTH,
 } from "./lengths";
 
 export const EXISTING_EMAIL_EXCEPTION = "Użytkownik o podanym adresie e-mail już istnieje.";
@@ -32,3 +34,6 @@ export const NICK_MAX_LENGTH_EXCEPTION = `Nick może mieć maksymalnie ${NICK_MA
 export const FAVORITE_CLUB_MAX_LENGTH_EXCEPTION = `W pole z ulubionym klubem można wpisać maksymalnie ${FAVORITE_CLUB_MAX_LENGTH} znaków.`;
 export const FAVORITE_FOOTBALLER_MAX_LENGTH_EXCEPTION = `W pole z ulubionym piłkarzem można wpisać maksymalnie ${FAVORITE_FOOTBALLER_MAX_LENGTH} znaków.`;
 export const COMMENT_CONTENT_MAX_LENGTH_EXCEPTION = `Komentarz może mieć maksymalnie ${COMMENT_CONTENT_MAX_LENGTH} znaki.`;
+export const NATIONALITY_CODE_LENGTH_EXCEPTION = `Kod narodowości musi składać się z ${NATIONALITY_CODE_LENGTH} znaków.`;
+export const PLAYER_NAME_MAX_LENGTH_EXCEPTION = `Imię piłkarza może mieć maksymalnie ${PLAYER_NAME_MAX_LENGTH} znaków.`;
+export const PLAYER_SURNAME_MAX_LENGTH_EXCEPTION = `Nazwisko piłkarza może mieć maksymalnie ${PLAYER_NAME_MAX_LENGTH} znaków.`;

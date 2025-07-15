@@ -83,8 +83,6 @@ export class UsersService {
       },
     });
 
-    // TODO: Add "not" value to avoid throwing exception while changing own nick
-
     if (doesNickExist) throw new ConflictException(EXISTING_NICK_EXCEPTION);
 
     return await this.prismaService.user.update({
@@ -117,11 +115,6 @@ export class UsersService {
       throw new ForbiddenException(ADMIN_CANNOT_BE_BANNED_EXCEPTION);
     }
 
-    // TODO: Think about if statement below
-    // if (!user.visitor) {
-    //   throw new BadRequestException(USER_NOT_VISITOR_EXCEPTION);
-    // }
-
     await this.prismaService.visitor.update({
       where: {
         userUuid,
@@ -143,11 +136,6 @@ export class UsersService {
       throw new NotFoundException(USER_NOT_FOUND_EXCEPTION);
     }
 
-    // TODO: Think about if statement below
-    // if (!user.visitor) {
-    //   throw new BadRequestException(USER_NOT_VISITOR_EXCEPTION);
-    // }
-
     await this.prismaService.visitor.update({
       where: { userUuid },
       data: {
@@ -157,8 +145,6 @@ export class UsersService {
 
     return user;
   }
-
-  // TODO: Handle nick
 
   async isUserBanned(uuid: string): Promise<boolean> {
     const banned = await this.prismaService.visitor.findUnique({

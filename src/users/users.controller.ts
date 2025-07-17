@@ -18,7 +18,6 @@ export class UsersController {
     return await this.usersService.getUsers();
   }
 
-  @Roles(Role.Admin, Role.Visitor)
   @Get("me")
   async getMe(@User() user: AuthEntity): Promise<UserEntity> {
     if (!user) return null;

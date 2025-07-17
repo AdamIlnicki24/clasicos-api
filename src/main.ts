@@ -11,7 +11,11 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
+app.enableCors({
+  origin: "*", // Your frontend URL
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  credentials: true,
+});
   //Change headers
   // app.enableCors({
   //   allowedHeaders: "*",

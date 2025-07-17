@@ -11,10 +11,8 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors({
-    origin: "*",
-  });
-
+  app.enableCors();
+  //Change headers
   // app.enableCors({
   //   allowedHeaders: "*",
   //   origin: "*",

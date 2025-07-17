@@ -10,7 +10,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-// config
+
   app.enableCors();
   //Change headers
   // app.enableCors({

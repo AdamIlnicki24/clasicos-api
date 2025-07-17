@@ -11,17 +11,12 @@ async function bootstrap() {
     }),
   );
 
-app.enableCors({
-  origin: "*", // Your frontend URL
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-  credentials: true,
-});
+  // app.enableCors();
   //Change headers
-  // app.enableCors({
-  //   allowedHeaders: "*",
-  //   origin: "*",
-  //   credentials: true,
-  // });
+  app.enableCors({
+    allowedHeaders: "*",
+    origin: "*",
+  });
 
   // app.enableCors({
   //   origin: ["https://clasicos-web.vercel.app"], // "*""

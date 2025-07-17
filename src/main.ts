@@ -11,11 +11,16 @@ async function bootstrap() {
     }),
   );
 
-  // TODO: Think about adding specific object below
   // app.enableCors();
+  // app.enableCors({
+  //   allowedHeaders: "*",
+  //   origin: "*",
+  //   credentials: true,
+  // });
   app.enableCors({
-    allowedHeaders: "*",
-    origin: "*",
+    origin: ["https://clasicos-web.vercel.app"], // "*""
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-api-version"],
     credentials: true,
   });
 

@@ -26,6 +26,13 @@ async function bootstrap() {
   //   credentials: true,
   // });
 
+  // app.enableCors({
+  //   origin: "*""
+  //   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  //   allowedHeaders: ["Content-Type", "Authorization", "x-api-version"],
+  //   credentials: true,
+  // });
+
   await app.listen(process.env.PORT ?? 3001);
 }
 

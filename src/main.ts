@@ -12,7 +12,8 @@ async function bootstrap() {
   );
 
   app.enableCors();
-  //Change headers
+  app.enableShutdownHooks();
+  
   // app.enableCors({
   //   allowedHeaders: "*",
   //   origin: "*",

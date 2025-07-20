@@ -73,7 +73,7 @@ export class TeamService {
       },
     });
 
-    if (!team) throw new NotFoundException(TEAM_NOT_FOUND_EXCEPTION);
+    if (!team) return null;
 
     return team;
   }

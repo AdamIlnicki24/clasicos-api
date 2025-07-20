@@ -60,7 +60,7 @@ export class TeamService {
   }
 
   async getTeamByUserUuid(userUuid: string) {
-    const team = await this.prismaService.team.findUnique({
+    return await this.prismaService.team.findUnique({
       where: {
         userUuid,
       },
@@ -72,10 +72,6 @@ export class TeamService {
         },
       },
     });
-
-    if (!team) return null;
-
-    return team;
   }
 
   async updateMyTeam(

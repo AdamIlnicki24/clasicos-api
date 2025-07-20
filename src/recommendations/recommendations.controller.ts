@@ -44,13 +44,13 @@ export class RecommendationsController {
     return { count };
   }
 
-  @Roles(Role.Admin, Role.Visitor)
-  @IsBanned()
   @Get("comments/:commentUuid/recommendations/me")
   async hasUserRecommendedComment(
     @Param("commentUuid") commentUuid: string,
     @User() user: UserEntity,
   ): Promise<{ hasRecommended: boolean }> {
+    if (!user) return { hasRecommended: false };
+
     const count = await this.recommendationsService.countByUserAndComment(user.uuid, commentUuid);
 
     return { hasRecommended: count > 0 };

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from "@nestjs/common";
 import { Role, Team } from "@prisma/client";
 import { AuthEntity } from "../auth/entities/auth.entity";
 import { User } from "../common/decorators/user.decorator";
@@ -19,12 +19,14 @@ export class TeamController {
 
   @Roles(Role.Admin, Role.Visitor)
   @Get("me")
+  @HttpCode(200)
   async getMyTeam(@User() user: AuthEntity): Promise<Team> {
     return await this.teamService.getTeamByUserUuid(user.uuid);
   }
 
   @Roles(Role.Admin, Role.Visitor)
   @Get(":userUuid")
+  @HttpCode(200)
   async getTeamByUserUuid(@Param("userUuid") userUuid: string): Promise<Team> {
     return await this.teamService.getTeamByUserUuid(userUuid);
   }

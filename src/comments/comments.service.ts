@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { CommentWithCount } from "../../types/commentWithCount";
 import { AuthEntity } from "../auth/entities/auth.entity";
 import { COMMENT_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
-import { PrismaService } from "../prisma.service";
+import { PrismaService } from "../../prisma/prisma.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 
 @Injectable()

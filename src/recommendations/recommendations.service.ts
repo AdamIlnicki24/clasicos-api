@@ -5,7 +5,7 @@ import {
   RECOMMENDATION_NOT_FOUND_EXCEPTION,
   USER_NOT_FOUND_EXCEPTION,
 } from "../constants/exceptions";
-import { PrismaService } from "../prisma.service";
+import { PrismaService } from "../../prisma/prisma.service";
 import { UserEntity } from "../users/entities/user.entity";
 import { Recommendation } from "@prisma/client";
 

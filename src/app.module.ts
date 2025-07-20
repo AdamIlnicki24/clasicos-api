@@ -7,7 +7,7 @@ import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { PlayersModule } from "./players/players.module";
 import { CommentsModule } from "./comments/comments.module";
-import { PrismaService } from "./prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 import { FirebaseService } from "./common/services/firebase.service";
 import { PreauthMiddleware } from "./auth/preauth.middleware";
 import { AuthService } from "./auth/auth.service";
@@ -16,7 +16,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { RolesGuard } from "./common/guards/roles.guard";
 import { IsBannedGuard } from "./common/guards/is-banned.guard";
 import { UsersService } from "./users/users.service";
-import { RecommendationsModule } from './recommendations/recommendations.module';
+import { RecommendationsModule } from "./recommendations/recommendations.module";
 
 @Module({
   imports: [

@@ -5,7 +5,7 @@ import {
   EXISTING_NICK_EXCEPTION,
   USER_NOT_FOUND_EXCEPTION,
 } from "../constants/exceptions";
-import { PrismaService } from "../prisma.service";
+import { PrismaService } from "../../prisma/prisma.service";
 import { UpdateUserNickDto } from "./dto/update-user-nick.dto";
 import { UpdateUserProfileDto } from "./dto/update-user-profile.dto";
 import { UserEntity } from "./entities/user.entity";

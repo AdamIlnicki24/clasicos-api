@@ -17,6 +17,7 @@ import { RolesGuard } from "./common/guards/roles.guard";
 import { IsBannedGuard } from "./common/guards/is-banned.guard";
 import { UsersService } from "./users/users.service";
 import { RecommendationsModule } from "./recommendations/recommendations.module";
+import { ConnectionLoggerMiddleware } from "./common/middleware/connection-logger.middleware";
 
 @Module({
   imports: [
@@ -50,6 +51,6 @@ import { RecommendationsModule } from "./recommendations/recommendations.module"
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(PreauthMiddleware).forRoutes({ path: "*", method: RequestMethod.ALL });
+    consumer.apply(PreauthMiddleware, ConnectionLoggerMiddleware).forRoutes({ path: "*", method: RequestMethod.ALL });
   }
 }

@@ -7,7 +7,12 @@ const prismaLogger = new Logger("PrismaService");
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor() {
     super({
-      log: [{ level: "query", emit: "stdout" }],
+      log: [
+        { level: "query", emit: "stdout" },
+        { level: "info", emit: "stdout" },
+        { level: "warn", emit: "stdout" },
+        { level: "error", emit: "stdout" },
+      ],
     });
   }
 

@@ -1,23 +1,23 @@
 import { MiddlewareConsumer, Module, RequestMethod } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import configuration from "./config/configuration";
+import { APP_GUARD } from "@nestjs/core";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
-import { PlayersModule } from "./players/players.module";
-import { CommentsModule } from "./comments/comments.module";
-import { PrismaService } from "../prisma/prisma.service";
-import { FirebaseService } from "./common/services/firebase.service";
-import { PreauthMiddleware } from "./auth/preauth.middleware";
 import { AuthService } from "./auth/auth.service";
-import { TeamModule } from "./team/team.module";
-import { APP_GUARD } from "@nestjs/core";
-import { RolesGuard } from "./common/guards/roles.guard";
+import { PreauthMiddleware } from "./auth/preauth.middleware";
+import { CommentsModule } from "./comments/comments.module";
 import { IsBannedGuard } from "./common/guards/is-banned.guard";
-import { UsersService } from "./users/users.service";
-import { RecommendationsModule } from "./recommendations/recommendations.module";
+import { RolesGuard } from "./common/guards/roles.guard";
 import { ConnectionLoggerMiddleware } from "./common/middleware/connection-logger.middleware";
+import { FirebaseService } from "./common/services/firebase.service";
+import configuration from "./config/configuration";
+import { PlayersModule } from "./players/players.module";
+import { RecommendationsModule } from "./recommendations/recommendations.module";
+import { TeamModule } from "./team/team.module";
+import { UsersModule } from "./users/users.module";
+import { UsersService } from "./users/users.service";
+import { PrismaModule } from "../prisma/prisma.module";
 
 @Module({
   imports: [
@@ -25,6 +25,7 @@ import { ConnectionLoggerMiddleware } from "./common/middleware/connection-logge
       isGlobal: true,
       load: [configuration],
     }),
+    PrismaModule,
     UsersModule,
     AuthModule,
     PlayersModule,
@@ -35,7 +36,6 @@ import { ConnectionLoggerMiddleware } from "./common/middleware/connection-logge
   controllers: [AppController],
   providers: [
     AppService,
-    PrismaService,
     FirebaseService,
     AuthService,
     UsersService,

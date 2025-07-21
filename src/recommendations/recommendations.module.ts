@@ -1,10 +1,9 @@
 import { Module } from "@nestjs/common";
-import { RecommendationsService } from "./recommendations.service";
 import { RecommendationsController } from "./recommendations.controller";
-import { PrismaService } from "../../prisma/prisma.service";
+import { RecommendationsService } from "./recommendations.service";
 
 @Module({
   controllers: [RecommendationsController],
-  providers: [RecommendationsService, PrismaService],
+  providers: [RecommendationsService],
 })
 export class RecommendationsModule {}

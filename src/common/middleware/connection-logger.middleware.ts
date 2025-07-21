@@ -9,11 +9,9 @@ export class ConnectionLoggerMiddleware implements NestMiddleware {
   constructor(private readonly prisma: PrismaService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    // policz przed
     const before = await this.prisma.getConnectionCount();
     this.logger.log(`Before handling ${req.method} ${req.url}: ${before} connections`);
 
-    // po zakończeniu odpowiedzi policz ponownie
     res.on("finish", async () => {
       const after = await this.prisma.getConnectionCount();
       this.logger.log(`After handling  ${req.method} ${req.url}: ${after} connections`);

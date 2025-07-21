@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware, Logger } from "@nestjs/common";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { PrismaService } from "../../../prisma/prisma.service";
 
 @Injectable()
@@ -9,15 +9,18 @@ export class ConnectionLoggerMiddleware implements NestMiddleware {
   constructor(private readonly prisma: PrismaService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    try {
-      const result: Array<{ Variable_name: string; Value: string }> = await this.prisma.$queryRaw`
-          SHOW STATUS WHERE Variable_name = 'Threads_connected';
-        `;
-      const count = result[0]?.Value ?? "unknown";
-      this.logger.log(`Active DB connections: ${count}`);
-    } catch (err) {
-      this.logger.error("Failed to fetch DB connection count", err);
-    }
+    // policz przed
+    const before = await this.prisma.getConnectionCount();
+    this.logger.log(`Before handling ${req.method} ${req.url}: ${before} connections`);
+
+    // po zakończeniu odpowiedzi policz ponownie
+    res.on("finish", async () => {
+      const after = await this.prisma.getConnectionCount();
+      this.logger.log(`After handling  ${req.method} ${req.url}: ${after} connections`);
+      const delta = after - before;
+      this.logger.log(`Δ connections: ${delta >= 0 ? "+" + delta : delta}`);
+    });
+
     next();
   }
 }

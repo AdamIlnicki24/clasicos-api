@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Team } from "@prisma/client";
-import { PrismaService } from "../prisma.service";
+import { PrismaService } from "../../prisma/prisma.service";
 import { AuthEntity } from "../auth/entities/auth.entity";
 import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "../constants/errorMessages";
 import { EXISTING_TEAM_EXCEPTION, INVALID_TEAM_EXCEPTION, TEAM_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
@@ -24,6 +24,7 @@ export class TeamService {
 
     if (exisitingTeam) throw new ConflictException(EXISTING_TEAM_EXCEPTION);
 
+    // TODO: Think about moving error handling below to dto
     if (
       goalkeepers.length !== GOALKEEPERS_LENGTH ||
       defenders.length !== DEFENDERS_LENGTH ||
@@ -44,7 +45,11 @@ export class TeamService {
       .create({
         data: {
           teamPlayers: { create: team },
-          userUuid: user.uuid,
+          user: {
+            connect: {
+              uuid: user.uuid,
+            },
+          },
         },
         include: { teamPlayers: { include: { player: true } } },
       })
@@ -54,12 +59,10 @@ export class TeamService {
       });
   }
 
-  async getTeamByUuid(uuid?: string) {
-    if (!uuid) throw new NotFoundException(TEAM_NOT_FOUND_EXCEPTION);
-
+  async getTeamByUserUuid(userUuid: string) {
     const team = await this.prismaService.team.findUnique({
       where: {
-        uuid,
+        userUuid,
       },
       include: {
         teamPlayers: {
@@ -70,7 +73,9 @@ export class TeamService {
       },
     });
 
-    if (!team) throw new NotFoundException(TEAM_NOT_FOUND_EXCEPTION);
+    if (!team) {
+      return null;
+    }
 
     return team;
   }

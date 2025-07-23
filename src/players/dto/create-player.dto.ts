@@ -1,19 +1,30 @@
 import { Position } from "@prisma/client";
-import { IsEnum, IsOptional, IsString, MaxLength } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsEnum, IsOptional, IsString, Length, MaxLength } from "class-validator";
+import {
+  NATIONALITY_CODE_LENGTH_EXCEPTION,
+  PLAYER_NAME_MAX_LENGTH_EXCEPTION,
+  PLAYER_SURNAME_MAX_LENGTH_EXCEPTION,
+} from "../../constants/exceptions";
+import { NATIONALITY_CODE_LENGTH, PLAYER_NAME_MAX_LENGTH, PLAYER_SURNAME_MAX_LENGTH } from "../../constants/lengths";
 
 export class CreatePlayerDto {
+  @Transform(({ value }) => {
+    if (typeof value !== "string") return undefined;
+    const trimmedValue = value.trim();
+    return trimmedValue === "" ? undefined : trimmedValue;
+  })
   @IsString()
-  @MaxLength(127)
+  @MaxLength(PLAYER_NAME_MAX_LENGTH, { message: PLAYER_NAME_MAX_LENGTH_EXCEPTION })
   @IsOptional()
   name?: string;
 
   @IsString()
-  @MaxLength(127)
+  @MaxLength(PLAYER_SURNAME_MAX_LENGTH, { message: PLAYER_SURNAME_MAX_LENGTH_EXCEPTION })
   surname: string;
 
-  // TODO: Implement package to show then flag and country code
   @IsString()
-  @MaxLength(127)
+  @Length(NATIONALITY_CODE_LENGTH, NATIONALITY_CODE_LENGTH, { message: NATIONALITY_CODE_LENGTH_EXCEPTION })
   nationality: string;
 
   @IsEnum(Position)

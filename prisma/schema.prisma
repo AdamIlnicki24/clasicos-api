@@ -12,13 +12,11 @@ model User {
   uuid       String @id @default(uuid())
   firebaseId String @unique @map("firebase_id") @db.VarChar(255)
   email      String @unique @db.VarChar(127)
-  nick       String @unique @db.VarChar(63)
 
   role    Role     @default(Visitor)
   visitor Visitor?
 
   createdAt               DateTime  @default(now()) @map("created_at")
-  acceptedPrivacyPolicyAt DateTime? @map("accepted_privacy_policy_at")
   updatedAt               DateTime  @updatedAt @map("updated_at")
 
   comments        Comment[]
@@ -30,6 +28,7 @@ model User {
 
 model Visitor {
   uuid               String  @id @default(uuid())
+  nick               String? @unique @db.VarChar(63)
   favoriteClub       String? @map("favorite_club") @db.VarChar(127)
   favoriteFootballer String? @map("favorite_footballer") @db.VarChar(127)
 
@@ -43,10 +42,10 @@ model Visitor {
 
 model Comment {
   uuid                 String @id @default(uuid())
-  content              String @db.VarChar(511)
+  content              String @db.VarChar(1023)
   resourceFriendlyLink String @map("resource_friendly_link") @db.VarChar(255)
 
-  createdAt DateTime  @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at")
 
   recommendations Recommendation[]
 
@@ -59,7 +58,7 @@ model Comment {
 model Recommendation {
   uuid String @id @default(uuid())
 
-  createdAt DateTime  @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at")
 
   user        User    @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
   userUuid    String  @map("user_uuid")

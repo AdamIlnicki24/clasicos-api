@@ -1,24 +1,14 @@
-import { Position, Role } from "@prisma/client";
+import { Role } from "@prisma/client";
+import { TeamEntity } from "../../team/entities/team.entity";
+import { VisitorEntity } from "../../common/entities/visitor.entity";
 
 export class AuthEntity {
   uuid: string;
   firebaseId: string;
   email: string;
-  nick: string;
-  city?: string;
-  favoriteClub?: string;
-  favoriteFootballer?: string;
   role: Role;
-  visitor?: {
-    uuid: string;
-  };
-  team?: {
-    uuid: string;
-    players?: Array<{
-      playerUuid: string;
-      position: Position;
-    }>;
-  };
+  visitor: VisitorEntity;
+  team?: TeamEntity;
   createdAt: Date;
   updatedAt: Date;
   bannedAt?: Date;

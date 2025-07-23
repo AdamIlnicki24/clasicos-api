@@ -151,7 +151,7 @@ export class RecommendationsService {
     });
   }
 
-  async deleteRecommendation(commentUuid: string, user: UserEntity): Promise<Recommendation> {
+  async deleteRecommendation(commentUuid: string, user: UserEntity): Promise<void> {
     const recommendation = await this.prismaService.recommendation.findUnique({
       where: {
         userUuid_commentUuid: {
@@ -163,12 +163,10 @@ export class RecommendationsService {
 
     if (!recommendation) throw new NotFoundException(RECOMMENDATION_NOT_FOUND_EXCEPTION);
 
-    return await this.prismaService.recommendation.delete({
+    await this.prismaService.recommendation.deleteMany({
       where: {
-        userUuid_commentUuid: {
-          userUuid: user.uuid,
-          commentUuid,
-        },
+        userUuid: user.uuid,
+        commentUuid,
       },
     });
   }

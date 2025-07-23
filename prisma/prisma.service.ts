@@ -1,10 +1,10 @@
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
 
-const prismaLogger = new Logger("PrismaService");
-
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class PrismaService extends PrismaClient implements OnModuleInit {
+  private readonly logger = new Logger("PrismaService");
+
   constructor() {
     super({
       log: [
@@ -17,19 +17,13 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   }
 
   async onModuleInit() {
-    await this.$connect();
-    prismaLogger.log("Connected to database");
-  }
-
-  async onModuleDestroy() {
-    await this.$disconnect();
-    prismaLogger.log("Disconnected from database");
+    this.logger.log("Connected to database");
   }
 
   async getConnectionCount(): Promise<number> {
     const result: Array<{ Variable_name: string; Value: string }> = await this.$queryRaw`
-        SHOW STATUS WHERE Variable_name = 'Threads_connected'
-      `;
+      SHOW STATUS WHERE Variable_name = 'Threads_connected'
+    `;
     const raw = result[0]?.Value ?? "0";
     return Number(raw);
   }

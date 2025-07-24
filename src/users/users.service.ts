@@ -74,7 +74,7 @@ export class UsersService {
 
     if (nick === currentNick) return user;
 
-    const doesNickExist = await this.prismaService.visitor.findFirst({
+    const uniqueNick = await this.prismaService.visitor.findFirst({
       where: {
         nick,
         userUuid: {
@@ -83,7 +83,7 @@ export class UsersService {
       },
     });
 
-    if (doesNickExist) throw new ConflictException(EXISTING_NICK_EXCEPTION);
+    if (uniqueNick && uniqueNick.nick !== "Enigma") throw new ConflictException(EXISTING_NICK_EXCEPTION);
 
     return await this.prismaService.user.update({
       where: {

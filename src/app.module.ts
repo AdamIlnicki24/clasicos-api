@@ -18,6 +18,7 @@ import { TeamModule } from "./team/team.module";
 import { UsersModule } from "./users/users.module";
 import { UsersService } from "./users/users.service";
 import { PrismaModule } from "../prisma/prisma.module";
+import { TestAccountsModule } from './test-accounts/test-accounts.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { PrismaModule } from "../prisma/prisma.module";
     CommentsModule,
     TeamModule,
     RecommendationsModule,
+    TestAccountsModule,
   ],
   controllers: [AppController],
   providers: [

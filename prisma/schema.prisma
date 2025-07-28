@@ -16,8 +16,8 @@ model User {
   role    Role     @default(Visitor)
   visitor Visitor?
 
-  createdAt               DateTime  @default(now()) @map("created_at")
-  updatedAt               DateTime  @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   comments        Comment[]
   recommendations Recommendation[]
@@ -106,6 +106,17 @@ model TeamPlayer {
 
   @@id([teamUuid, playerUuid])
   @@map("team_players")
+}
+
+model TestAccount {
+  uuid String @id @default(uuid())
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  email    String @unique @db.VarChar(127)
+  password String @db.VarChar(127)
+
+  @@map("test_accounts")
 }
 
 enum Role {

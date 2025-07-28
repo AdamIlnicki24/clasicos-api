@@ -38,3 +38,4 @@ export const NATIONALITY_CODE_LENGTH_EXCEPTION = `Kod narodowości musi składa�
 export const PLAYER_NAME_MAX_LENGTH_EXCEPTION = `Imię piłkarza może mieć maksymalnie ${PLAYER_NAME_MAX_LENGTH} znaków.`;
 export const PLAYER_SURNAME_MAX_LENGTH_EXCEPTION = `Nazwisko piłkarza może mieć maksymalnie ${PLAYER_NAME_MAX_LENGTH} znaków.`;
 export const EMAIL_MAX_LENGTH_EXCEPTION = `E-mail może mieć maksymalnie ${EMAIL_MAX_LENGTH} znaków.`;
+export const NO_TEST_ACCOUNTS_FOUND_EXCEPTION = "Brak kont testowych.";

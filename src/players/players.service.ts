@@ -38,7 +38,6 @@ export class PlayersService {
           position,
         },
       })
-      // TODO: Think about error handling
       .catch((error) => {
         console.error(error);
         throw new BadRequestException(SOMETHING_WENT_WRONG_ERROR_MESSAGE);
@@ -56,7 +55,6 @@ export class PlayersService {
     });
   }
 
-  // TODO: Think about method below
   async getPlayerByUuid(uuid: string) {
     const player = await this.prismaService.player.findUnique({
       where: { uuid },

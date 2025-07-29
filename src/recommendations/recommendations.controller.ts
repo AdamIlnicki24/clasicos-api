@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Controller, Delete, Get, HttpCode, Param, Post } from "@nestjs/common";
 import { Recommendation, Role } from "@prisma/client";
 import { IsBanned } from "../common/decorators/is-banned.decorator";
 import { Roles } from "../common/decorators/roles.decorator";
@@ -59,10 +59,8 @@ export class RecommendationsController {
   @Roles(Role.Admin, Role.Visitor)
   @IsBanned()
   @Delete("comments/:commentUuid/recommendations")
-  async deleteRecommendation(
-    @Param("commentUuid") commentUuid: string,
-    @User() user: UserEntity,
-  ): Promise<Recommendation> {
-    return await this.recommendationsService.deleteRecommendation(commentUuid, user);
+  @HttpCode(204)
+  async deleteRecommendation(@Param("commentUuid") commentUuid: string, @User() user: UserEntity): Promise<void> {
+    await this.recommendationsService.deleteRecommendation(commentUuid, user);
   }
 }

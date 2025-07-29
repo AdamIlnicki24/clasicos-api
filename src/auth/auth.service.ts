@@ -48,7 +48,6 @@ export class AuthService {
       })
       .catch((error) => {
         console.error(error);
-        // TODO: Think about deleting firebase user
         throw new BadRequestException(SOMETHING_WENT_WRONG_ERROR_MESSAGE);
       });
   }

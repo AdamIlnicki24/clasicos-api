@@ -1,6 +1,7 @@
 import {
   COMMENT_CONTENT_MAX_LENGTH,
   DEFENDERS_LENGTH,
+  EMAIL_MAX_LENGTH,
   FAVORITE_CLUB_MAX_LENGTH,
   FAVORITE_FOOTBALLER_MAX_LENGTH,
   FORWARDS_LENGTH,
@@ -27,9 +28,8 @@ export const RECOMMENDATION_NOT_FOUND_EXCEPTION = "Nie znaleziono rekomendacji."
 export const ADMIN_CANNOT_BE_BANNED_EXCEPTION = "Nie możesz zbanować administratora.";
 export const USER_HAS_BEEN_BANNED_EXCEPTION = "Zostałeś zbanowany i nie możesz wykonać tej akcji.";
 export const USER_NOT_LOGGED_IN_EXCEPTION = "Brak dostępu - musisz się zalogować.";
-export const PASSWORD_LENGTH_EXCEPTION = `Hasło musi mieć od ${PASSWORD_MIN_LENGTH} do ${PASSWORD_MAX_LENGTH} znaków.`;
-export const PASSWORD_MIN_LENGTH_EXCEPTION = `Hasło musi mieć co najmniej ${PASSWORD_MIN_LENGTH} znaków.`;
-export const PASSWORD_MAX_LENGTH_EXCEPTION = `Hasło może mieć co najwyżej ${PASSWORD_MAX_LENGTH} znaków.`;
+export const PASSWORD_EXCEPTION = `Hasło musi mieć co najmniej ${PASSWORD_MIN_LENGTH} znaków, w tym wielką literę i cyfrę.`;
+export const PASSWORD_MAX_LENGTH_EXCEPTION = `Hasło może mieć maksymalnie ${PASSWORD_MAX_LENGTH} znaków.`;
 export const NICK_MAX_LENGTH_EXCEPTION = `Nick może mieć maksymalnie ${NICK_MAX_LENGTH} znaki.`;
 export const FAVORITE_CLUB_MAX_LENGTH_EXCEPTION = `W pole z ulubionym klubem można wpisać maksymalnie ${FAVORITE_CLUB_MAX_LENGTH} znaków.`;
 export const FAVORITE_FOOTBALLER_MAX_LENGTH_EXCEPTION = `W pole z ulubionym piłkarzem można wpisać maksymalnie ${FAVORITE_FOOTBALLER_MAX_LENGTH} znaków.`;
@@ -37,3 +37,5 @@ export const COMMENT_CONTENT_MAX_LENGTH_EXCEPTION = `Komentarz może mieć maksy
 export const NATIONALITY_CODE_LENGTH_EXCEPTION = `Kod narodowości musi składać się z ${NATIONALITY_CODE_LENGTH} znaków.`;
 export const PLAYER_NAME_MAX_LENGTH_EXCEPTION = `Imię piłkarza może mieć maksymalnie ${PLAYER_NAME_MAX_LENGTH} znaków.`;
 export const PLAYER_SURNAME_MAX_LENGTH_EXCEPTION = `Nazwisko piłkarza może mieć maksymalnie ${PLAYER_NAME_MAX_LENGTH} znaków.`;
+export const EMAIL_MAX_LENGTH_EXCEPTION = `E-mail może mieć maksymalnie ${EMAIL_MAX_LENGTH} znaków.`;
+export const NO_TEST_ACCOUNTS_FOUND_EXCEPTION = "Brak kont testowych.";

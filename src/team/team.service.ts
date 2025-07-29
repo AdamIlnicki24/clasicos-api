@@ -24,7 +24,6 @@ export class TeamService {
 
     if (exisitingTeam) throw new ConflictException(EXISTING_TEAM_EXCEPTION);
 
-    // TODO: Think about moving error handling below to dto
     if (
       goalkeepers.length !== GOALKEEPERS_LENGTH ||
       defenders.length !== DEFENDERS_LENGTH ||

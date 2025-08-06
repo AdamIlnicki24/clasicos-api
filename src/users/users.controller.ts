@@ -20,6 +20,7 @@ export class UsersController {
 
   @Get("me")
   async getMe(@User() user: AuthEntity): Promise<UserEntity> {
+    if (!user) return null;
     return await this.usersService.getUser(user.uuid);
   }
 

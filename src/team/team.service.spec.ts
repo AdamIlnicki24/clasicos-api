@@ -6,6 +6,7 @@ import { AuthEntity } from "../auth/entities/auth.entity";
 import { CreateTeamDto } from "./dto/create-team.dto";
 import { UpdateTeamDto } from "./dto/update-team.dto";
 import { GOALKEEPERS_LENGTH, DEFENDERS_LENGTH, MIDFIELDERS_LENGTH, FORWARDS_LENGTH } from "../constants/lengths";
+import { Role } from "@prisma/client";
 
 type MockFn = jest.Mock;
 
@@ -17,7 +18,7 @@ describe("TeamService", () => {
     uuid: "user-uuid",
     firebaseId: "fb-123",
     email: "test@example.com",
-    role: "Visitor",
+    role: Role.Visitor,
   } as AuthEntity;
 
   beforeEach(async () => {

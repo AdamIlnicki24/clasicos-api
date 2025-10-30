@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
 import { Role } from "@prisma/client";
-import { CommentWithCount } from "types/commentWithCount";
+import { CommentWithCount } from "types/comment";
 import { AuthEntity } from "../auth/entities/auth.entity";
 import { IsBanned } from "../common/decorators/is-banned.decorator";
 import { Roles } from "../common/decorators/roles.decorator";
@@ -24,8 +24,11 @@ export class CommentsController {
   }
 
   @Get()
-  async getComments(@Param("resourceFriendlyLink") resourceFriendlyLink: string): Promise<CommentWithCount[]> {
-    return await this.commentsService.getComments(resourceFriendlyLink);
+  async getComments(
+    @Param("resourceFriendlyLink") resourceFriendlyLink: string,
+    @User() user?: AuthEntity,
+  ): Promise<(CommentWithCount & { hasRecommended?: boolean })[]> {
+    return await this.commentsService.getComments(resourceFriendlyLink, user?.uuid);
   }
 
   @Get(":uuid")

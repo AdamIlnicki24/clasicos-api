@@ -1,13 +1,12 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { PrismaService } from "../../prisma/prisma.service";
 import {
   COMMENT_NOT_FOUND_EXCEPTION,
   EXISTING_RECOMMENDATION_EXCEPTION,
   RECOMMENDATION_NOT_FOUND_EXCEPTION,
   USER_NOT_FOUND_EXCEPTION,
 } from "../constants/exceptions";
-import { PrismaService } from "../../prisma/prisma.service";
 import { UserEntity } from "../users/entities/user.entity";
-import { Recommendation } from "@prisma/client";
 
 @Injectable()
 export class RecommendationsService {

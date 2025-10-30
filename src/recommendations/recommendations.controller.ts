@@ -1,5 +1,5 @@
-import { Controller, Delete, Get, HttpCode, Param, Post } from "@nestjs/common";
-import { Recommendation, Role } from "@prisma/client";
+import { Controller, Get, Param, Post } from "@nestjs/common";
+import { Role } from "@prisma/client";
 import { IsBanned } from "../common/decorators/is-banned.decorator";
 import { Roles } from "../common/decorators/roles.decorator";
 import { User } from "../common/decorators/user.decorator";
@@ -9,16 +9,6 @@ import { RecommendationsService } from "./recommendations.service";
 @Controller()
 export class RecommendationsController {
   constructor(private readonly recommendationsService: RecommendationsService) {}
-
-  @Roles(Role.Admin, Role.Visitor)
-  @IsBanned()
-  @Post("comments/:commentUuid/recommendations")
-  async createRecommendation(
-    @Param("commentUuid") commentUuid: string,
-    @User() user: UserEntity,
-  ): Promise<Recommendation> {
-    return await this.recommendationsService.createRecommendation(commentUuid, user);
-  }
 
   @Roles(Role.Admin, Role.Visitor)
   @IsBanned()
@@ -54,13 +44,5 @@ export class RecommendationsController {
     const count = await this.recommendationsService.countByUserAndComment(user.uuid, commentUuid);
 
     return { hasRecommended: count > 0 };
-  }
-
-  @Roles(Role.Admin, Role.Visitor)
-  @IsBanned()
-  @Delete("comments/:commentUuid/recommendations")
-  @HttpCode(204)
-  async deleteRecommendation(@Param("commentUuid") commentUuid: string, @User() user: UserEntity): Promise<void> {
-    await this.recommendationsService.deleteRecommendation(commentUuid, user);
   }
 }

@@ -6,8 +6,12 @@ export type CommentWithCount = Comment & {
   };
   user: {
     uuid: string;
-    visitor: {
+    visitor?: {
       nick?: string;
     };
   };
+};
+
+export type CommentWithInclude = CommentWithCount & {
+  recommendations?: { uuid: string }[];
 };

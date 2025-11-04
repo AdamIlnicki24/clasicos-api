@@ -1,10 +1,10 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Team } from "@prisma/client";
 import { PrismaService } from "../../prisma/prisma.service";
-import { AuthEntity } from "../auth/entities/auth.entity";
 import { SOMETHING_WENT_WRONG_ERROR_MESSAGE } from "../constants/errorMessages";
 import { EXISTING_TEAM_EXCEPTION, INVALID_TEAM_EXCEPTION, TEAM_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
 import { DEFENDERS_LENGTH, FORWARDS_LENGTH, GOALKEEPERS_LENGTH, MIDFIELDERS_LENGTH } from "../constants/lengths";
+import { UserEntity } from "../users/entities/user.entity";
 import { CreateTeamDto } from "./dto/create-team.dto";
 import { UpdateTeamDto } from "./dto/update-team.dto";
 
@@ -14,7 +14,7 @@ export class TeamService {
 
   async createMyTeam(
     { goalkeepers, defenders, midfielders, forwards }: CreateTeamDto,
-    user: AuthEntity,
+    user: UserEntity,
   ): Promise<Team> {
     const exisitingTeam = await this.prismaService.team.findUnique({
       where: {
@@ -81,7 +81,7 @@ export class TeamService {
 
   async updateMyTeam(
     { goalkeepers, defenders, midfielders, forwards }: UpdateTeamDto,
-    user: AuthEntity,
+    user: UserEntity,
   ): Promise<Team> {
     const exisitingTeam = await this.prismaService.team.findUnique({
       where: {
@@ -126,7 +126,7 @@ export class TeamService {
       });
   }
 
-  async deleteMyTeam(user: AuthEntity): Promise<Team> {
+  async deleteMyTeam(user: UserEntity): Promise<Team> {
     const team = await this.prismaService.team.findUnique({
       where: {
         userUuid: user.uuid,

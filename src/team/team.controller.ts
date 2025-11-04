@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from "@nestjs/common";
 import { Role, Team } from "@prisma/client";
-import { User } from "../common/decorators/user.decorator";
-import { CreateTeamDto } from "./dto/create-team.dto";
-import { TeamService } from "./team.service";
-import { UpdateTeamDto } from "./dto/update-team.dto";
 import { Roles } from "../common/decorators/roles.decorator";
+import { User } from "../common/decorators/user.decorator";
 import { UserEntity } from "../users/entities/user.entity";
+import { CreateTeamDto } from "./dto/create-team.dto";
+import { UpdateTeamDto } from "./dto/update-team.dto";
+import { TeamService } from "./team.service";
 
 @Controller("team")
 export class TeamController {

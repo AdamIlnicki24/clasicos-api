@@ -91,7 +91,7 @@ describe("CommentsController", () => {
 
       const result = await controller.getComments(resourceFriendlyLink);
 
-      expect(mockCommentsService.getComments).toHaveBeenCalledWith(resourceFriendlyLink);
+      expect(mockCommentsService.getComments).toHaveBeenCalledWith(resourceFriendlyLink, undefined);
 
       expect(result).toBe(list);
     });

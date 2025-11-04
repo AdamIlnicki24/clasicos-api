@@ -146,7 +146,12 @@ describe("CommentsService", () => {
         orderBy: { createdAt: "desc" },
       });
 
-      expect(result).toBe(list);
+      const expected = list.map((comment) => ({
+        ...comment,
+        hasRecommended: false,
+      }));
+
+      expect(result).toEqual(expected);
     });
 
     it("propagates error when prisma.findMany rejects", async () => {

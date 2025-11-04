@@ -14,14 +14,12 @@ const mockRecommendationsService = {
 describe("RecommendationsController", () => {
   let controller: RecommendationsController;
 
-  const userEntity: UserEntity = {
+  const user: UserEntity = {
     uuid: "user-uuid",
-    firebaseId: "fb-123",
-    email: "user@example.com",
     role: Role.Visitor,
     createdAt: new Date("2020-01-01T00:00:00.000Z"),
     updatedAt: new Date("2020-01-01T00:00:00.000Z"),
-  } as UserEntity;
+  };
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -51,9 +49,9 @@ describe("RecommendationsController", () => {
 
       mockRecommendationsService.toggleRecommendation.mockResolvedValue(expectedResponse);
 
-      const result = await controller.toggleRecommendation(commentUuid, userEntity);
+      const result = await controller.toggleRecommendation(commentUuid, user);
 
-      expect(mockRecommendationsService.toggleRecommendation).toHaveBeenCalledWith(commentUuid, userEntity);
+      expect(mockRecommendationsService.toggleRecommendation).toHaveBeenCalledWith(commentUuid, user);
 
       expect(result).toEqual(expectedResponse);
     });
@@ -101,9 +99,9 @@ describe("RecommendationsController", () => {
     it("calls service.countByUserAndComment and returns hasRecommended true/false based on count", async () => {
       mockRecommendationsService.countByUserAndComment.mockResolvedValue(1);
 
-      const result = await controller.hasUserRecommendedComment(targetCommentUuid, userEntity);
+      const result = await controller.hasUserRecommendedComment(targetCommentUuid, user);
 
-      expect(mockRecommendationsService.countByUserAndComment).toHaveBeenCalledWith(userEntity.uuid, targetCommentUuid);
+      expect(mockRecommendationsService.countByUserAndComment).toHaveBeenCalledWith(user.uuid, targetCommentUuid);
 
       expect(result).toEqual({ hasRecommended: true });
     });

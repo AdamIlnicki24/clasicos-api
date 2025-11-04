@@ -1,9 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { Role } from "@prisma/client";
+import { ROLES_KEY } from "../common/decorators/roles.decorator";
+import { UserEntity } from "../users/entities/user.entity";
 import { CommentsController } from "./comments.controller";
 import { CommentsService } from "./comments.service";
-import { ROLES_KEY } from "../common/decorators/roles.decorator";
-import { Role } from "@prisma/client";
-import { AuthEntity } from "../auth/entities/auth.entity";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 
 const mockCommentsService = {
@@ -16,12 +16,12 @@ const mockCommentsService = {
 describe("CommentsController", () => {
   let controller: CommentsController;
 
-  const user: AuthEntity = {
+  const user: UserEntity = {
     uuid: "user-uuid",
-    firebaseId: "fb-123",
-    email: "u@example.com",
     role: Role.Visitor,
-  } as AuthEntity;
+    createdAt: new Date("2020-01-01T00:00:00.000Z"),
+    updatedAt: new Date("2020-01-01T00:00:00.000Z"),
+  };
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -112,7 +112,7 @@ describe("CommentsController", () => {
       const result = await controller.deleteComment(comment.uuid);
 
       expect(mockCommentsService.deleteComment).toHaveBeenCalledWith(comment.uuid);
-      
+
       expect(result).toBe(comment);
     });
   });

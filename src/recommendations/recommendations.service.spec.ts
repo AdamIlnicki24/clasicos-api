@@ -11,14 +11,12 @@ describe("RecommendationsService", () => {
   let service: RecommendationsService;
   let prismaService: PrismaService;
 
-  const userEntity: UserEntity = {
+  const user: UserEntity = {
     uuid: "user-uuid",
-    firebaseId: "fb-123",
-    email: "user@example.com",
     role: Role.Visitor,
     createdAt: new Date("2020-01-01T00:00:00.000Z"),
     updatedAt: new Date("2020-01-01T00:00:00.000Z"),
-  } as UserEntity;
+  };
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -58,7 +56,7 @@ describe("RecommendationsService", () => {
       (prismaService.comment.findUnique as MockFn).mockResolvedValue({ uuid: commentUuid });
 
       (prismaService.recommendation.findUnique as MockFn).mockResolvedValue({
-        userUuid: userEntity.uuid,
+        userUuid: user.uuid,
         commentUuid,
       });
 
@@ -66,16 +64,16 @@ describe("RecommendationsService", () => {
 
       (prismaService.recommendation.count as MockFn).mockResolvedValue(5);
 
-      const result = await service.toggleRecommendation(commentUuid, userEntity);
+      const result = await service.toggleRecommendation(commentUuid, user);
 
       expect(prismaService.comment.findUnique).toHaveBeenCalledWith({ where: { uuid: commentUuid } });
 
       expect(prismaService.recommendation.findUnique).toHaveBeenCalledWith({
-        where: { userUuid_commentUuid: { userUuid: userEntity.uuid, commentUuid } },
+        where: { userUuid_commentUuid: { userUuid: user.uuid, commentUuid } },
       });
 
       expect(prismaService.recommendation.delete).toHaveBeenCalledWith({
-        where: { userUuid_commentUuid: { userUuid: userEntity.uuid, commentUuid } },
+        where: { userUuid_commentUuid: { userUuid: user.uuid, commentUuid } },
       });
 
       expect(prismaService.recommendation.count).toHaveBeenCalledWith({ where: { commentUuid } });
@@ -90,17 +88,17 @@ describe("RecommendationsService", () => {
 
       (prismaService.recommendation.create as MockFn).mockResolvedValue({
         uuid: "rec-1",
-        userUuid: userEntity.uuid,
+        userUuid: user.uuid,
         commentUuid,
       });
 
       (prismaService.recommendation.count as MockFn).mockResolvedValue(7);
 
-      const result = await service.toggleRecommendation(commentUuid, userEntity);
+      const result = await service.toggleRecommendation(commentUuid, user);
 
       expect(prismaService.recommendation.create).toHaveBeenCalledWith({
         data: {
-          user: { connect: { uuid: userEntity.uuid } },
+          user: { connect: { uuid: user.uuid } },
           comment: { connect: { uuid: commentUuid } },
         },
       });
@@ -113,7 +111,7 @@ describe("RecommendationsService", () => {
     it("should throw NotFoundException when comment does not exist", async () => {
       (prismaService.comment.findUnique as MockFn).mockResolvedValue(null);
 
-      await expect(service.toggleRecommendation(commentUuid, userEntity)).rejects.toBeInstanceOf(NotFoundException);
+      await expect(service.toggleRecommendation(commentUuid, user)).rejects.toBeInstanceOf(NotFoundException);
     });
 
     it("should propagate errors from prisma operations", async () => {
@@ -121,7 +119,7 @@ describe("RecommendationsService", () => {
 
       (prismaService.recommendation.findUnique as MockFn).mockRejectedValue(new Error("db fail"));
 
-      await expect(service.toggleRecommendation(commentUuid, userEntity)).rejects.toThrow("db fail");
+      await expect(service.toggleRecommendation(commentUuid, user)).rejects.toThrow("db fail");
     });
   });
 

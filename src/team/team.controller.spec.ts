@@ -1,12 +1,12 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { TeamController } from "./team.controller";
-import { TeamService } from "./team.service";
-import { ROLES_KEY } from "../common/decorators/roles.decorator";
 import { Role, Team } from "@prisma/client";
-import { AuthEntity } from "../auth/entities/auth.entity";
-import { GOALKEEPERS_LENGTH, DEFENDERS_LENGTH, MIDFIELDERS_LENGTH, FORWARDS_LENGTH } from "../constants/lengths";
+import { ROLES_KEY } from "../common/decorators/roles.decorator";
+import { DEFENDERS_LENGTH, FORWARDS_LENGTH, GOALKEEPERS_LENGTH, MIDFIELDERS_LENGTH } from "../constants/lengths";
+import { UserEntity } from "../users/entities/user.entity";
 import { CreateTeamDto } from "./dto/create-team.dto";
 import { UpdateTeamDto } from "./dto/update-team.dto";
+import { TeamController } from "./team.controller";
+import { TeamService } from "./team.service";
 
 const mockTeamService = {
   createMyTeam: jest.fn(),
@@ -17,12 +17,13 @@ const mockTeamService = {
 
 describe("TeamController", () => {
   let controller: TeamController;
-  const user: AuthEntity = {
+
+  const user: UserEntity = {
     uuid: "user-uuid",
-    firebaseId: "fb-123",
-    email: "u@example.com",
     role: Role.Visitor,
-  } as AuthEntity;
+    createdAt: new Date("2020-01-01T00:00:00.000Z"),
+    updatedAt: new Date("2020-01-01T00:00:00.000Z"),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

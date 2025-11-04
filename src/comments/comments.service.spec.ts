@@ -1,10 +1,10 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { CommentsService } from "./comments.service";
-import { PrismaService } from "../../prisma/prisma.service";
 import { NotFoundException } from "@nestjs/common";
-import { AuthEntity } from "../auth/entities/auth.entity";
-import { CreateCommentDto } from "./dto/create-comment.dto";
+import { Test, TestingModule } from "@nestjs/testing";
 import { Role } from "@prisma/client";
+import { PrismaService } from "../../prisma/prisma.service";
+import { UserEntity } from "../users/entities/user.entity";
+import { CommentsService } from "./comments.service";
+import { CreateCommentDto } from "./dto/create-comment.dto";
 
 type MockFn = jest.Mock;
 
@@ -12,12 +12,12 @@ describe("CommentsService", () => {
   let service: CommentsService;
   let prismaService: PrismaService;
 
-  const user: AuthEntity = {
+  const user: UserEntity = {
     uuid: "user-uuid",
-    firebaseId: "fb-123",
-    email: "test@example.com",
     role: Role.Visitor,
-  } as AuthEntity;
+    createdAt: new Date("2020-01-01T00:00:00.000Z"),
+    updatedAt: new Date("2020-01-01T00:00:00.000Z"),
+  };
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -146,7 +146,12 @@ describe("CommentsService", () => {
         orderBy: { createdAt: "desc" },
       });
 
-      expect(result).toBe(list);
+      const expected = list.map((comment) => ({
+        ...comment,
+        hasRecommended: false,
+      }));
+
+      expect(result).toEqual(expected);
     });
 
     it("propagates error when prisma.findMany rejects", async () => {

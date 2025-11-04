@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { CommentWithCount, CommentWithInclude } from "../../types/comment";
-import { AuthEntity } from "../auth/entities/auth.entity";
-import { COMMENT_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
-import { PrismaService } from "../../prisma/prisma.service";
-import { CreateCommentDto } from "./dto/create-comment.dto";
 import { Prisma } from "@prisma/client";
+import { PrismaService } from "../../prisma/prisma.service";
+import { CommentWithCount, CommentWithInclude } from "../../types/comment";
+import { COMMENT_NOT_FOUND_EXCEPTION } from "../constants/exceptions";
+import { UserEntity } from "../users/entities/user.entity";
+import { CreateCommentDto } from "./dto/create-comment.dto";
 
 @Injectable()
 export class CommentsService {
@@ -12,7 +12,7 @@ export class CommentsService {
 
   async createComment(
     { content }: CreateCommentDto,
-    user: AuthEntity,
+    user: UserEntity,
     resourceFriendlyLink: string,
   ): Promise<CommentWithCount> {
     return await this.prismaService.comment.create({

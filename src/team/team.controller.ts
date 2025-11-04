@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from "@nestjs/common";
 import { Role, Team } from "@prisma/client";
-import { AuthEntity } from "../auth/entities/auth.entity";
-import { User } from "../common/decorators/user.decorator";
-import { CreateTeamDto } from "./dto/create-team.dto";
-import { TeamService } from "./team.service";
-import { UpdateTeamDto } from "./dto/update-team.dto";
 import { Roles } from "../common/decorators/roles.decorator";
+import { User } from "../common/decorators/user.decorator";
+import { UserEntity } from "../users/entities/user.entity";
+import { CreateTeamDto } from "./dto/create-team.dto";
+import { UpdateTeamDto } from "./dto/update-team.dto";
+import { TeamService } from "./team.service";
 
 @Controller("team")
 export class TeamController {
@@ -13,14 +13,14 @@ export class TeamController {
 
   @Roles(Role.Admin, Role.Visitor)
   @Post("me")
-  async createMyTeam(@Body() createTeamDto: CreateTeamDto, @User() user: AuthEntity): Promise<Team> {
+  async createMyTeam(@Body() createTeamDto: CreateTeamDto, @User() user: UserEntity): Promise<Team> {
     return await this.teamService.createMyTeam(createTeamDto, user);
   }
 
   @Roles(Role.Admin, Role.Visitor)
   @Get("me")
   @HttpCode(200)
-  async getMyTeam(@User() user: AuthEntity): Promise<Team> {
+  async getMyTeam(@User() user: UserEntity): Promise<Team> {
     return await this.teamService.getTeamByUserUuid(user.uuid);
   }
 
@@ -33,13 +33,13 @@ export class TeamController {
 
   @Roles(Role.Admin, Role.Visitor)
   @Patch("me")
-  async updateMyTeam(@Body() updateTeamDto: UpdateTeamDto, @User() user: AuthEntity): Promise<Team> {
+  async updateMyTeam(@Body() updateTeamDto: UpdateTeamDto, @User() user: UserEntity): Promise<Team> {
     return await this.teamService.updateMyTeam(updateTeamDto, user);
   }
 
   @Roles(Role.Admin, Role.Visitor)
   @Delete("me")
-  async deleteMyTeam(@User() user: AuthEntity): Promise<Team> {
+  async deleteMyTeam(@User() user: UserEntity): Promise<Team> {
     return await this.teamService.deleteMyTeam(user);
   }
 }

@@ -35,21 +35,25 @@ describe("PlayersController", () => {
   describe("Roles metadata", () => {
     it("createPlayer should have Admin role only", () => {
       const roles = Reflect.getMetadata(ROLES_KEY, PlayersController.prototype.createPlayer);
+
       expect(roles).toEqual([Role.Admin]);
     });
 
     it("getPlayers should have Admin and Visitor roles", () => {
       const roles = Reflect.getMetadata(ROLES_KEY, PlayersController.prototype.getPlayers);
+
       expect(roles).toEqual([Role.Admin, Role.Visitor]);
     });
 
     it("getPlayerByUuid should have Admin and Visitor roles", () => {
       const roles = Reflect.getMetadata(ROLES_KEY, PlayersController.prototype.getPlayerByUuid);
+
       expect(roles).toEqual([Role.Admin, Role.Visitor]);
     });
 
     it("updatePlayer should have Admin role only", () => {
       const roles = Reflect.getMetadata(ROLES_KEY, PlayersController.prototype.updatePlayer);
+      
       expect(roles).toEqual([Role.Admin]);
     });
   });
